@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx nodemon"
+    "dev": "npx nodemon",
+    "build": "rimraf build && tsc",
+    "start": "npm run build && node build/app.js"
   },
   "type": "module",
   "imports": {
@@ -29,13 +31,16 @@
   "devDependencies": {
     "@types/express": "^4.17.20",
     "@types/node": "^20.8.10",
+    "@types/pg": "^8.10.7",
     "concurrently": "^8.2.2",
     "nodemon": "^3.0.1",
+    "rimraf": "^5.0.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "pg": "^8.11.3"
   }
 }

@@ -1,20 +1,30 @@
-import {EquipmentService} from "../../../app/services/EquipmentService/EquipmentService";
-import {ErrorsHandler} from "../Errors/ErrorsController";
+import {EquipmentService} from "../../../app/services/EquipmentService/EquipmentService.js";
+import {ErrorsHandler} from "../Errors/ErrorsController.js";
+import {Request, Response} from "express";
 
 
 export class EquipmentController {
-    constructor(readonly equipmentService: EquipmentService, readonly errController: ErrorsHandler) {
+    constructor(public equipmentService: EquipmentService, public errController: ErrorsHandler) {
     }
 
-    async getAllEquipments(req: any, res: any) {
+    async getAllEquipments(req: Request, res: Response) {
 
         try {
             res.send("lox")
-
         } catch (e: any) {
-            this.errController.HandlerError(res, e, 400, "продукты не получены")
+            this?.errController?.HandlerError(res, e, 400, "продукты не получены")
         }
 
     }
-}
 
+    async addNewEquipmentController(req: Request, res: Response) {
+        try {
+            const fields = req.body;
+            const newEquipment = await this.equipmentService.addNewEquipment(fields)
+            res.send(newEquipment)
+        } catch (e: any) {
+            this?.errController?.HandlerError(res, e, 400, "ошибка при добавлении продукта")
+            console.log(e)
+        }
+    }
+}

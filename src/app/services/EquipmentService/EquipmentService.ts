@@ -1,14 +1,19 @@
-import {EquipmentRepo} from "../../repositories/EquipmentRepo.ts";
+import {EquipmentRepo} from "../../repositories/EquipmentRepo.js";
 import {
     postgresEquipmentRepository
-} from "../../../infrastructure/db/repository/PostgresQL/EquipmentRepositoryImplement.ts";
+} from "../../../infrastructure/db/repository/PostgresQL/EquipmentRepositoryImplement.js";
+import {addProductDto} from "../../repositories/dto/addEquipmentDto";
 
 
 export class EquipmentService {
-    constructor(readonly equipmentRepo: EquipmentRepo) {}
+    constructor(public equipmentRepo: EquipmentRepo) {}
 
     async getAllEquipments() {
         return this.equipmentRepo.getAll()
+    }
+
+    async addNewEquipment(fields: addProductDto) {
+        return await this.equipmentRepo.add(fields)
     }
 }
 

@@ -1,6 +1,6 @@
-import {Area} from "../models/Area/Area";
-import {addProductDto} from "./dto/addAreaDto";
-import {updateAreaDto} from "./dto/updateAreaDto";
+import {Area} from "../models/Area/Area.js";
+import {addProductDto} from "./dto/addAreaDto.js";
+import {updateAreaDto} from "./dto/updateAreaDto.js";
 
 export interface AreaRepo {
     getAll(): Area[]

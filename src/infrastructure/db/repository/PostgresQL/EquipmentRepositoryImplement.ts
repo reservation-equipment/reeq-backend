@@ -1,7 +1,8 @@
-import {EquipmentRepo} from "../../../../app/repositories/EquipmentRepo";
-import {addProductDto} from "../../../../app/repositories/dto/addEquipmentDto";
-import {updateEquipmentDto} from "../../../../app/repositories/dto/updateEquipmentDto";
-import {Equipment} from "../../../../app/models/Equipment/Equipment";
+import {EquipmentRepo} from "../../../../app/repositories/EquipmentRepo.js";
+import {addProductDto} from "../../../../app/repositories/dto/addEquipmentDto.js";
+import {updateEquipmentDto} from "../../../../app/repositories/dto/updateEquipmentDto.js";
+import {Equipment} from "../../../../app/models/Equipment/Equipment.js";
+import {product} from "../../queries/QueriesEquipment.js";
 
 
 export class EquipmentRepositoryImplement implements EquipmentRepo {
@@ -35,9 +36,8 @@ export class EquipmentRepositoryImplement implements EquipmentRepo {
         ]
     }
 
-    add(equipment: addProductDto): string {
-
-        return ""
+    async add(equipment: addProductDto): Promise<string> {
+        return await product.add<addProductDto>(equipment)
     }
 
     delete(id: number): string {

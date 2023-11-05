@@ -1,6 +1,3 @@
-
-
-
 export class Equipment {
     constructor(
         readonly id: number,
