@@ -15,6 +15,10 @@ export class EquipmentService {
     async addNewEquipment(fields: addProductDto) {
         return await this.equipmentRepo.add(fields)
     }
+
+    async getEquipmentById(id: number) {
+        return await this.equipmentRepo.getById(id)
+    }
 }
 
 export const equipmentService = new EquipmentService(postgresEquipmentRepository)

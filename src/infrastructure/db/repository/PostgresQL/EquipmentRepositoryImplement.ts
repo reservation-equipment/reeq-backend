@@ -2,42 +2,42 @@ import {EquipmentRepo} from "../../../../app/repositories/EquipmentRepo.js";
 import {addProductDto} from "../../../../app/repositories/dto/addEquipmentDto.js";
 import {updateEquipmentDto} from "../../../../app/repositories/dto/updateEquipmentDto.js";
 import {Equipment} from "../../../../app/models/Equipment/Equipment.js";
-import {product} from "../../queries/QueriesEquipment.js";
+import {prisma} from "../../orm/prisma/PrismaClient.js";
 
+
+const defaultReturnObj = {
+    count: 0,
+    name: "",
+    id: 0,
+    description: "",
+    area_id: 0
+}
 
 export class EquipmentRepositoryImplement implements EquipmentRepo {
-    getById(id: number): Equipment {
-
-        return {
-            count: 0,
-            name: "",
-            id: 0,
-            description:""
-        }
+    async getById(id: number): Promise<Equipment | null> {
+        return prisma.equipments.findUnique({
+            where: {
+                id
+            }
+        });
     }
 
     getByFieldName(fieldName: string): Equipment {
-        return {
-            count: 0,
-            name: "",
-            id: 0,
-            description:""
-        }
+        return defaultReturnObj
     }
 
     getAll(): Equipment[] {
         return [
-            {
-                count: 0,
-                name: "",
-                id: 0,
-                description:""
-            }
+            defaultReturnObj
         ]
     }
 
-    async add(equipment: addProductDto): Promise<string> {
-        return await product.add<addProductDto>(equipment)
+    async add(equipment: addProductDto): Promise<Equipment> {
+        return prisma.equipments.create({
+            data: {
+                ...equipment
+            }
+        });
     }
 
     delete(id: number): string {
@@ -46,12 +46,7 @@ export class EquipmentRepositoryImplement implements EquipmentRepo {
 
     update(equipment: updateEquipmentDto): Equipment {
 
-        return {
-            count: 0,
-            name: "",
-            id: 0,
-            description:""
-        }
+        return defaultReturnObj
     }
 
 }

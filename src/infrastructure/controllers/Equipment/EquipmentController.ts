@@ -27,4 +27,14 @@ export class EquipmentController {
             console.log(e)
         }
     }
+
+    async getEquipmentById(req: Request, res: Response) {
+        try {
+            const id = Number(req.params.id)
+            const equipment = await this.equipmentService.getEquipmentById(id)
+            res.send(equipment)
+        } catch (e: any) {
+            this.errController.HandlerError(res, e, 400, "Ошибка при получении оборудования по id")
+        }
+    }
 }

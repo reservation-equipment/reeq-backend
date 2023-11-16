@@ -11,6 +11,7 @@ class EquipmentsRoutes {
     initRoutes(router: Express) {
         router.get("/equipments", this.equipmentsController.getAllEquipments.bind(this.equipmentsController))
         router.post("/equipment", this.equipmentsController.addNewEquipmentController.bind(this.equipmentsController))
+        router.get("/equipment/:id", this.equipmentsController.getEquipmentById.bind(this.equipmentsController))
     }
 }
 

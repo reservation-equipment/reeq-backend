@@ -4,9 +4,9 @@ import {addProductDto} from "./dto/addEquipmentDto.js";
 
 export interface EquipmentRepo {
     getAll(): Equipment[]
-    getById(id: number): Equipment
+    getById(id: number): Promise<Equipment | null>
     getByFieldName(fieldName: string): Equipment
-    add(equipment: addProductDto): Promise<string>
+    add(equipment: addProductDto): Promise<Equipment>
     delete(id: number): string
     update(equipment: updateEquipmentDto): Equipment
 }
