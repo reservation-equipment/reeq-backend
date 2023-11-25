@@ -1,12 +1,10 @@
-import {UserRoles} from "../../../infrastructure/shared/types/UserTypes";
-
 export class User {
     constructor(readonly id: number,
-                public name: string,
-                public surname: string,
+                public first_name: string,
+                public second_name: string,
                 private password: string,
-                private email: string,
-                private role: UserRoles,
+                private mail: string,
+                private role_id: number,
     ) {
     }
 }

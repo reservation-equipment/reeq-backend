@@ -1,6 +1,5 @@
 import {EquipmentRepo} from "../../../../app/repositories/EquipmentRepo.js";
 import {addProductDto} from "../../../../app/repositories/dto/addEquipmentDto.js";
-import {updateEquipmentDto} from "../../../../app/repositories/dto/updateEquipmentDto.js";
 import {Equipment} from "../../../../app/models/Equipment/Equipment.js";
 import {prisma} from "../../orm/prisma/PrismaClient.js";
 
@@ -13,7 +12,7 @@ const defaultReturnObj = {
     area_id: 0
 }
 
-export class EquipmentRepositoryImplement implements EquipmentRepo {
+export class EquipmentRepoImplement implements EquipmentRepo {
     async getById(id: number): Promise<Equipment | null> {
         return prisma.equipments.findUnique({
             where: {
@@ -26,10 +25,8 @@ export class EquipmentRepositoryImplement implements EquipmentRepo {
         return defaultReturnObj
     }
 
-    getAll(): Equipment[] {
-        return [
-            defaultReturnObj
-        ]
+    async getAll(): Promise<Equipment[]> {
+        return prisma.equipments.findMany();
     }
 
     async add(equipment: addProductDto): Promise<Equipment> {
@@ -40,15 +37,27 @@ export class EquipmentRepositoryImplement implements EquipmentRepo {
         });
     }
 
-    delete(id: number): string {
-        return ""
+    async delete(id: number): Promise<Equipment> {
+        return prisma.equipments.delete({
+            where: {
+                id
+            },
+        })
     }
 
-    update(equipment: updateEquipmentDto): Equipment {
+    async update(equipment: Equipment): Promise<Equipment> {
 
-        return defaultReturnObj
+        const {id, ...fields} = equipment;
+
+        return prisma.equipments.update({
+            data: {
+                ...fields
+            }, where: {
+                id
+            }
+        })
     }
 
 }
 
-export const postgresEquipmentRepository = new EquipmentRepositoryImplement()
+export const postgresEquipmentRepository = new EquipmentRepoImplement()

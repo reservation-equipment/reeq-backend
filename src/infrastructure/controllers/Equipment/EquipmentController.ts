@@ -1,6 +1,6 @@
-import {EquipmentService} from "../../../app/services/EquipmentService/EquipmentService.js";
 import {ErrorsHandler} from "../Errors/ErrorsController.js";
 import {Request, Response} from "express";
+import {EquipmentService} from "../../../app/services/EquipmentService/EquipmentService";
 
 
 export class EquipmentController {
@@ -8,9 +8,12 @@ export class EquipmentController {
     }
 
     async getAllEquipments(req: Request, res: Response) {
-
         try {
-            res.send("lox")
+            const data = await this.equipmentService.getAllEquipments()
+            res.send({
+                msg: "Оборудование получено",
+                data
+            })
         } catch (e: any) {
             this?.errController?.HandlerError(res, e, 400, "продукты не получены")
         }
@@ -37,4 +40,31 @@ export class EquipmentController {
             this.errController.HandlerError(res, e, 400, "Ошибка при получении оборудования по id")
         }
     }
+
+    async updateEquipment(req: Request, res: Response) {
+        try {
+            const data = req.body
+            const equipmentUpdated = await this.equipmentService.updateEquipment(data)
+            res.send({
+                msg: "Информация об оборудовании успешно обновлена",
+                data: equipmentUpdated
+            })
+        } catch (e: any) {
+            this.errController.HandlerError(res, e, 400, "Ошибка при обновлении информации об оборудовании")
+        }
+    }
+
+    async deleteEquipment(req: Request, res: Response) {
+        try {
+            const id = Number(req.params.id)
+            const equipmentDeleted = await this.equipmentService.deleteEquipment(id)
+            res.send({
+                msg: `Удаление оборудования прошло успешно, удалено: ${equipmentDeleted.name}`
+            })
+        } catch (e: any) {
+            console.log(e)
+            this.errController.HandlerError(res, e, 400, "Ошибка при удалении информации")
+        }
+    }
+
 }

@@ -14,12 +14,16 @@
     "target": "es2022",
     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "lib": [
-      "ES6"
+      "es5",
+      "es6",
+      "es7"
     ],
     /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* Specify what JSX code is generated. */
-    // "experimentalDecorators": true,                   /* Enable experimental support for legacy experimental decorators. */
-    // "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
+    "experimentalDecorators": true,
+    /* Enable experimental support for legacy experimental decorators. */
+    "emitDecoratorMetadata": true,
+    /* Emit design-type metadata for decorated declarations in source files. */
     // "jsxFactory": "",                                 /* Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'. */
     // "jsxFragmentFactory": "",                         /* Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'. */
     // "jsxImportSource": "",                            /* Specify module specifier used to import the JSX factory functions when using 'jsx: react-jsx*'. */
@@ -29,14 +33,26 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
 
     /* Modules */
-    "module": "esnext",
+    "module": "ESNext",
     /* Specify what module code is generated. */
     "rootDir": "src",
     /* Specify the root folder within your source files. */
     "moduleResolution": "bundler",
     /* Specify how TypeScript looks up a file from a given module specifier. */
-    // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
-    // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
+    "baseUrl": "./src",
+    /* Specify the base directory to resolve non-relative module names. */
+    "paths": {
+//      "~": ["./src"],
+//      "~/infrastructure/*": [
+//        "./infrastructure/*.ts",
+//        "./infrastructure/*.js"
+//      ],
+//      "~/app/*": [
+//        "./app/*.ts",
+//        "./app/*.js"
+//      ]
+    },
+    /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [],                                  /* Specify multiple folders that act like './node_modules/@types'. */
     // "types": [],                                      /* Specify type package names to be included without being referenced in a source file. */
@@ -127,21 +143,17 @@
   "ts-node": {
     "esm": true
   },
-  "lib": [
-    "esnext"
-  ],
+  //  "lib": [
+  //    "esnext"
+  //  ],
   "include": [
     "src/**/*"
   ],
   "exclude": [
     "node_modules"
   ],
-    "paths": {
-      "~/app/*": [
-        "src/app/*"
-      ],
-      "~/infrastructure/*": [
-        "src/app/infrastructure/*"
-      ]
-    }
+  "tsc-alias": {
+    "verbose": false,
+    "resolveFullPaths": true
+  }
 }

@@ -3,7 +3,10 @@ export class ErrorsHandler {
     }
 
     async HandlerError(res: any, error: Error, code: number, msg: string) {
-        if (error) res.status(code).json(msg)
+        if (error) {
+            res.json(error.message, msg)
+            res.sendStatus(code)
+        }
     }
 }
 

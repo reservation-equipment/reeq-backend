@@ -1,12 +1,12 @@
 import {Area} from "../models/Area/Area.js";
-import {addProductDto} from "./dto/addAreaDto.js";
-import {updateAreaDto} from "./dto/updateAreaDto.js";
+import {addAreaDto} from "./dto/addAreaDto.js";
 
 export interface AreaRepo {
-    getAll(): Area[]
-    getById(id: number): Area
-    getByFieldName(fieldName: string): Area
-    add(equipment: addProductDto): string
-    delete(id: number): string
-    update(equipment: updateAreaDto): Area
+    getAll(): Promise<Area[]>
+    getById(id: number): Promise<Area | null>
+    getByFieldName(fieldName: string): Promise<Area | null>
+    add(area: addAreaDto): Promise<Area>
+    delete(id: number): Promise<Area>
+    update(area: Area): Promise<Area>
+    getAllWithInstitutes(): any
 }

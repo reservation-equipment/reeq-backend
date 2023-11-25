@@ -8,41 +8,45 @@ datasource db {
 }
 
 model areas {
-  id          Int          @id @default(autoincrement())
-  name        String?      @db.VarChar(255)
-  square      Int?
-  appointment String?
-  booking     booking[]
-  equipments  equipments[]
+  id            Int          @id @default(autoincrement())
+  institutes_id Int
+  name          String?      @db.VarChar(255)
+  square        Int?
+  appointment   String?
+  institutes    institutes?  @relation(fields: [institutes_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  booking       booking[]
+  equipments    equipments[]
 }
 
 model booking {
-  id           Int         @id @default(autoincrement())
-  date_from    DateTime    @db.Date
-  date_to      DateTime    @db.Date
-  created_at   DateTime    @default(now()) @db.Timestamptz(6)
-  updated_at   DateTime    @default(now()) @db.Timestamptz(6)
+  id           Int           @id @default(autoincrement())
+  date_from    DateTime      @db.Date
+  date_to      DateTime      @db.Date
+  created_at   DateTime      @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime      @default(now()) @db.Timestamptz(6)
+  status       StatusBooking @default(Created)
   user_id      Int
   equipment_id Int
   area_id      Int
-  areas        areas?      @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  equipments   equipments? @relation(fields: [equipment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  users        users?      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  areas        areas?        @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  equipments   equipments?   @relation(fields: [equipment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users        users?        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model equipments {
   id          Int       @id @default(autoincrement())
   area_id     Int
-  name        String   @db.VarChar(255)
+  name        String    @db.VarChar(255)
   description String?
   count       Int
   booking     booking[]
-  areas       areas    @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  areas       areas     @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model institutes {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(100)
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(100)
+  areas areas[]
 }
 
 model roles {
@@ -57,6 +61,11 @@ enum Roles {
   USER
 }
 
+enum StatusBooking {
+  Created
+  Complete
+}
+
 model users {
   id          Int       @id @default(autoincrement())
   role_id     Int?
@@ -66,4 +75,12 @@ model users {
   password    String    @db.VarChar(50)
   booking     booking[]
   roles       roles?    @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tokens      tokens[]
+}
+
+model tokens {
+  id            Int    @id @default(autoincrement())
+  user_id       Int?
+  refresh_token String
+  users         users?  @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
 }
