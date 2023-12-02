@@ -52,7 +52,8 @@ export class EquipmentRepoImplement implements EquipmentRepo {
         return prisma.equipments.update({
             data: {
                 ...fields
-            }, where: {
+            },
+            where: {
                 id
             }
         })

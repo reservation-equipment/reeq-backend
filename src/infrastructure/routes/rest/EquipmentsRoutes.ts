@@ -1,12 +1,11 @@
 import {Express} from 'express';
 import {EquipmentController} from "../../controllers/Equipment/EquipmentController";
 import {equipmentService} from "../../../app/services/EquipmentService/EquipmentService";
-import {errorsHandler} from "../../controllers/Errors/ErrorsController";
 import {Routes} from "./Routes";
+import {AuthMiddleware} from "../../middlewares/AuthMiddleware";
 
 
-
-export const equipmentsController = new EquipmentController(equipmentService, errorsHandler)
+export const equipmentsController = new EquipmentController(equipmentService)
 
 class EquipmentsRoutes implements Routes{
     constructor(readonly equipmentsController: EquipmentController, public initRoutePath: string) {}

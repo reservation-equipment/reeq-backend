@@ -1,12 +1,10 @@
 import {Express} from "express";
 import {AreaController} from "../../controllers/Area/AreaController";
 import {areaService} from "../../../app/services/AreaService/AreaService";
-import {errorsHandler} from "../../controllers/Errors/ErrorsController";
 import {Routes} from "./Routes";
 
 
-
-const areaController = new AreaController(areaService, errorsHandler)
+const areaController = new AreaController(areaService)
 
 class AreaRoutes implements Routes{
     constructor(readonly areaController: AreaController, public initRoutePath: string) {

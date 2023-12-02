@@ -69,18 +69,18 @@ enum StatusBooking {
 model users {
   id          Int       @id @default(autoincrement())
   role_id     Int?
-  first_name  String?   @db.VarChar(30)
-  second_name String?   @db.VarChar(30)
-  mail        String    @db.VarChar(50)
-  password    String    @db.VarChar(50)
+  first_name  String?   @db.VarChar(70)
+  second_name String?   @db.VarChar(70)
+  mail        String    @db.VarChar(70)
+  password    String    @db.Text
   booking     booking[]
   roles       roles?    @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  tokens      tokens[]
+  tokens      tokens?
 }
 
 model tokens {
   id            Int    @id @default(autoincrement())
-  user_id       Int?
-  refresh_token String
-  users         users?  @relation(fields: [user_id], references: [id], onUpdate: NoAction, onDelete: Cascade)
+  user_id       Int    @unique
+  refresh_token String @db.Text @unique
+  users         users? @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }

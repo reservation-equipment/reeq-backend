@@ -1,12 +1,11 @@
-import {ErrorsHandler} from "../Errors/ErrorsController";
 import {AreaService} from "../../../app/services/AreaService/AreaService";
-import {Request, Response} from "express";
+import {NextFunction, Request, Response} from "express";
 
 export class AreaController {
-    constructor(private areaService: AreaService, private errController: ErrorsHandler) {
+    constructor(private areaService: AreaService) {
     }
 
-    async createArea(req: Request, res: Response){
+    async createArea(req: Request, res: Response, next: NextFunction){
         try {
             const data = req.body;
             const createdArea = await this.areaService.createArea(data)
@@ -15,11 +14,11 @@ export class AreaController {
                 data: createdArea
             })
         } catch (e: any) {
-            this.errController.HandlerError(res, e, 400, "Ошибка при добавлении помещения")
+            next(e)
         }
     }
 
-    async getAllAreas(req: Request, res: Response) {
+    async getAllAreas(req: Request, res: Response, next: NextFunction) {
         try {
             const data = await this.areaService.getAllAreas()
             res.send({
@@ -27,12 +26,12 @@ export class AreaController {
                 data
             })
         } catch (e: any) {
-            this.errController.HandlerError(res, e, 400, "Ошибка при получении помещений")
+            next(e)
 
         }
     }
 
-    async deleteArea(req: Request, res: Response) {
+    async deleteArea(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id)
             const deletedArea = await this.areaService.deleteArea(id)
@@ -40,11 +39,11 @@ export class AreaController {
                 msg: `Удаление помещения прошло успешно, удалено: ${deletedArea.name}`
             })
         } catch (e: any) {
-            this.errController.HandlerError(res, e, 400, "Ошибка при удалении помещения")
+            next(e)
         }
     }
 
-    async getAreaById(req: Request, res: Response) {
+    async getAreaById(req: Request, res: Response, next: NextFunction) {
         try {
             const id = Number(req.params.id)
             const area = await this.areaService.getAreaById(id)
@@ -53,7 +52,7 @@ export class AreaController {
                 data: area
             })
         } catch (e: any) {
-            this.errController.HandlerError(res, e, 400, "Ошибка при получении помещения")
+            next(e)
 
         }
     }

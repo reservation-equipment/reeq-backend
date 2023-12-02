@@ -1,11 +1,10 @@
 import {Express} from 'express';
 import {DepartmentController} from "../../controllers/Department/DepartmentController";
 import {departmentService} from "../../../app/services/DepartmentService/DepartmentService";
-import {errorsHandler} from "../../controllers/Errors/ErrorsController";
 import {Routes} from "./Routes";
 
 
-export const departmentsController = new DepartmentController(departmentService, errorsHandler)
+export const departmentsController = new DepartmentController(departmentService)
 
 class DepartmentsRoutes implements Routes {
     constructor(private departmentsController: DepartmentController, private initRoutePath: string) {}
