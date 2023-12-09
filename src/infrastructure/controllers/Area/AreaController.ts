@@ -1,4 +1,4 @@
-import {AreaService} from "../../../app/services/AreaService/AreaService";
+import {areaService, AreaService} from "../../../app/services/AreaService/AreaService";
 import {NextFunction, Request, Response} from "express";
 
 export class AreaController {
@@ -58,3 +58,5 @@ export class AreaController {
     }
 
 }
+
+export const areaController = new AreaController(areaService)

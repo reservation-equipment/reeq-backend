@@ -8,6 +8,7 @@ import {departmentsRoutes} from "./infrastructure/routes/rest/DepartmentsRoutes"
 import {userRoutes} from "./infrastructure/routes/rest/UserRoutes";
 import {ErrorMiddleware} from "./infrastructure/middlewares/ErrorMiddleware";
 import * as process from "process";
+import {bookingRoutes} from "./infrastructure/routes/rest/BookingRoutes";
 
 
 dotenv.config();
@@ -17,13 +18,14 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
     credentials: true,
-    origin: process.env.CLIENT_URL
+    origin: process.env.CLIENT_URL,
 }))
 
 equipmentRoutes.initRoutes(app);
 areaRoutes.initRoutes(app)
 departmentsRoutes.initRoutes(app)
 userRoutes.initRoutes(app)
+bookingRoutes.initRoutes(app)
 
 
 app.use(ErrorMiddleware)

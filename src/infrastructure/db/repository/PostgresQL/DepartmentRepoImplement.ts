@@ -3,7 +3,7 @@ import {Department} from "../../../../app/models/Department/Department";
 import {prisma} from "../../orm/prisma/PrismaClient";
 
 
-export class DepartmentRepoImplement implements DepartmentRepo{
+export class DepartmentRepoImplement implements DepartmentRepo {
     async getById(id: number): Promise<Department | null> {
         return prisma.institutes.findUnique({
             where: {

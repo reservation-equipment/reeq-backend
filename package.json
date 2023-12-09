@@ -9,7 +9,7 @@
     "build": "rimraf build && tsc",
     "start": "npm run build && node build/app.js",
     "docker_build": "docker-compose up -d --build",
-    "migrate": "npx prisma migrate dev --name init"
+    "migrate": "npx prisma migrate dev --name"
   },
   "type": "module",
   "keywords": [],

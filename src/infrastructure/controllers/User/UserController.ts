@@ -1,4 +1,4 @@
-import {UserService} from "../../../app/services/UserService/UserService";
+import {userService, UserService} from "../../../app/services/UserService/UserService";
 import {NextFunction, Request, Response} from "express";
 import {convertToMilliseconds} from "../../helpers/Time";
 import {validationResult} from "express-validator";
@@ -96,3 +96,5 @@ export class UserController {
         }
     }
 }
+
+export const userController = new UserController(userService)

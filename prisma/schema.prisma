@@ -14,7 +14,6 @@ model areas {
   square        Int?
   appointment   String?
   institutes    institutes?  @relation(fields: [institutes_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  booking       booking[]
   equipments    equipments[]
 }
 
@@ -24,23 +23,22 @@ model booking {
   date_to      DateTime      @db.Date
   created_at   DateTime      @default(now()) @db.Timestamptz(6)
   updated_at   DateTime      @default(now()) @db.Timestamptz(6)
-  status       StatusBooking @default(Created)
+  status       StatusBooking @default(CREATED)
   user_id      Int
   equipment_id Int
-  area_id      Int
-  areas        areas?        @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   equipments   equipments?   @relation(fields: [equipment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   users        users?        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model equipments {
-  id          Int       @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   area_id     Int
-  name        String    @db.VarChar(255)
+  name        String          @db.VarChar(255)
   description String?
   count       Int
+  status      StatusEquipment @default(FREE)
   booking     booking[]
-  areas       areas     @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  areas       areas           @relation(fields: [area_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model institutes {
@@ -62,8 +60,14 @@ enum Roles {
 }
 
 enum StatusBooking {
-  Created
-  Complete
+  CREATED
+  COMPLETE
+  EXPIRED
+}
+
+enum StatusEquipment {
+  FREE
+  BOOKED
 }
 
 model users {
@@ -81,6 +85,6 @@ model users {
 model tokens {
   id            Int    @id @default(autoincrement())
   user_id       Int    @unique
-  refresh_token String @db.Text @unique
+  refresh_token String @unique @db.Text
   users         users? @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }

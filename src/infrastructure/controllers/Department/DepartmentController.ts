@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {DepartmentService} from "../../../app/services/DepartmentService/DepartmentService";
+import {departmentService, DepartmentService} from "../../../app/services/DepartmentService/DepartmentService";
 
 
 export class DepartmentController {
@@ -44,3 +44,5 @@ export class DepartmentController {
         }
     }
 }
+
+export const departmentsController = new DepartmentController(departmentService)

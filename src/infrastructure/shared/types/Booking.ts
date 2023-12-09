@@ -1,0 +1,1 @@
+export type BookingStatus = "CREATED" | "COMPLETE" | "EXPIRED"

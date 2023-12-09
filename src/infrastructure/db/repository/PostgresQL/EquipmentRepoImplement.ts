@@ -2,14 +2,16 @@ import {EquipmentRepo} from "../../../../app/repositories/EquipmentRepo.js";
 import {addProductDto} from "../../../../app/repositories/dto/addEquipmentDto.js";
 import {Equipment} from "../../../../app/models/Equipment/Equipment.js";
 import {prisma} from "../../orm/prisma/PrismaClient.js";
+import {updateEquipmentDto} from "../../../../app/repositories/dto/updateEquipmentDto";
 
 
-const defaultReturnObj = {
+const defaultReturnObj: Equipment = {
     count: 0,
     name: "",
     id: 0,
     description: "",
-    area_id: 0
+    area_id: 0,
+    status: "FREE"
 }
 
 export class EquipmentRepoImplement implements EquipmentRepo {
@@ -45,7 +47,7 @@ export class EquipmentRepoImplement implements EquipmentRepo {
         })
     }
 
-    async update(equipment: Equipment): Promise<Equipment> {
+    async update(equipment: updateEquipmentDto): Promise<Equipment> {
 
         const {id, ...fields} = equipment;
 

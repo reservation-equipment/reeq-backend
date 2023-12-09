@@ -1,5 +1,6 @@
 import {addProductDto} from "./dto/addEquipmentDto.js";
-import {Equipment} from "~/app/models/Equipment/Equipment";
+import {Equipment} from "../models/Equipment/Equipment";
+import {updateEquipmentDto} from "./dto/updateEquipmentDto";
 
 export interface EquipmentRepo {
     getAll(): Promise<Equipment[]>
@@ -7,5 +8,5 @@ export interface EquipmentRepo {
     getByFieldName(fieldName: string): Equipment
     add(equipment: addProductDto): Promise<Equipment>
     delete(id: number): Promise<Equipment>
-    update(equipment: Equipment): Promise<Equipment>
+    update(equipment: updateEquipmentDto): Promise<Equipment>
 }
