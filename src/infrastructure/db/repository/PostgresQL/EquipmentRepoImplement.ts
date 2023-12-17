@@ -3,6 +3,7 @@ import {addProductDto} from "../../../../app/repositories/dto/addEquipmentDto.js
 import {Equipment} from "../../../../app/models/Equipment/Equipment.js";
 import {prisma} from "../../orm/prisma/PrismaClient.js";
 import {updateEquipmentDto} from "../../../../app/repositories/dto/updateEquipmentDto";
+import {EquipmentFilter} from "../../../shared/types/Equipment";
 
 
 const defaultReturnObj: Equipment = {
@@ -27,8 +28,15 @@ export class EquipmentRepoImplement implements EquipmentRepo {
         return defaultReturnObj
     }
 
-    async getAll(): Promise<Equipment[]> {
-        return prisma.equipments.findMany();
+    async getAll(filter: EquipmentFilter): Promise<Equipment[]> {
+        return prisma.equipments.findMany({
+            where: {
+                name: {
+                    startsWith: filter?.name
+                },
+                status: filter?.status
+            }
+        });
     }
 
     async add(equipment: addProductDto): Promise<Equipment> {

@@ -4,14 +4,15 @@ import {
 } from "../../../infrastructure/db/repository/PostgresQL/EquipmentRepoImplement.js";
 import {addProductDto} from "../../repositories/dto/addEquipmentDto";
 import {Equipment} from "../../models/Equipment/Equipment";
+import {EquipmentFilter} from "../../../infrastructure/shared/types/Equipment";
 
 
 export class EquipmentService {
     constructor(public equipmentRepo: EquipmentRepo) {
     }
 
-    async getAllEquipments() {
-        return this.equipmentRepo.getAll()
+    async getAllEquipments(filter: EquipmentFilter) {
+        return this.equipmentRepo.getAll(filter)
     }
 
     async addNewEquipment(fields: addProductDto) {

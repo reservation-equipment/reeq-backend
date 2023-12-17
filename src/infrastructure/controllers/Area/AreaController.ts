@@ -57,6 +57,19 @@ export class AreaController {
         }
     }
 
+    async updateArea(req: Request, res: Response, next: NextFunction) {
+        try {
+            const newData = req.body
+            const updatedData = await this.areaService.updateArea(newData)
+            res.send({
+                msg: "Помещение успешно обновлено!",
+                data: updatedData
+            })
+        } catch (e) {
+            next(e)
+        }
+    }
+
 }
 
 export const areaController = new AreaController(areaService)

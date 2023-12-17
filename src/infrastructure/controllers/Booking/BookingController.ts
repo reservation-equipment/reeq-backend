@@ -6,6 +6,19 @@ export class BookingController {
     constructor(private bookingService: BookingService) {
     }
 
+    async getBookings(req: Request, res: Response, next: NextFunction) {
+        try {
+            const {filter, skip, take} = req.body
+            const bookings = await this.bookingService.getBookings(filter, skip, take)
+            res.send({
+                msg: 'Бронирования успешно получены!',
+                data: bookings
+            })
+        } catch (e) {
+            next(e)
+        }
+    }
+
     async createBooking(req: Request, res: Response, next: NextFunction) {
         try {
             const bookingInfo = req.body

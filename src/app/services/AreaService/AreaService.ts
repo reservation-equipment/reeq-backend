@@ -3,6 +3,7 @@ import {
     postgresAreaRepository
 } from "../../../infrastructure/db/repository/PostgresQL/AreaRepoImplement.js";
 import {addAreaDto} from "../../repositories/dto/addAreaDto.js";
+import {updateAreaDto} from "../../repositories/dto/updateAreaDto";
 
 export class AreaService {
     constructor(readonly areaRepo: AreaRepo) {
@@ -30,6 +31,10 @@ export class AreaService {
 
     async getAreaById(id: number) {
         return this.areaRepo.getById(id)
+    }
+
+    async updateArea(newData: updateAreaDto) {
+        return this.areaRepo.update(newData)
     }
 }
 

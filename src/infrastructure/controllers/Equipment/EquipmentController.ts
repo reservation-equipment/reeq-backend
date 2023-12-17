@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {equipmentService, EquipmentService} from "../../../app/services/EquipmentService/EquipmentService";
+import {EquipmentStatus} from "../../shared/types/Equipment";
 
 
 export class EquipmentController {
@@ -8,7 +9,12 @@ export class EquipmentController {
 
     async getAllEquipments(req: Request, res: Response, next: NextFunction) {
         try {
-            const data = await this.equipmentService.getAllEquipments()
+            const {name, status} = req.query;
+            const data = await this.equipmentService.getAllEquipments({
+                name: name as string,
+                status: status as EquipmentStatus
+            })
+            console.log(req.query)
             res.send({
                 msg: "Оборудование получено",
                 data

@@ -32,6 +32,10 @@ export class BookingService {
             status: "COMPLETE",
         })
     }
+
+    async getBookings(filter: object, skip: number, take: number) {
+        return this.bookingRepo.getByFilter(filter, skip, take)
+    }
 }
 
 export const bookingService = new BookingService(postgresBookingRepository, postgresEquipmentRepository)

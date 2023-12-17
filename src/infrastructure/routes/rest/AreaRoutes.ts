@@ -11,6 +11,7 @@ class AreaRoutes implements Routes{
         router.get(`${this.initRoutePath}s`, this.areaController.getAllAreas.bind(this.areaController))
         router.delete(`${this.initRoutePath}/:id`, this.areaController.deleteArea.bind(this.areaController))
         router.get(`${this.initRoutePath}/:id`, this.areaController.getAreaById.bind(this.areaController))
+        router.patch(`${this.initRoutePath}`, this.areaController.updateArea.bind(this.areaController))
     }
 }
 
