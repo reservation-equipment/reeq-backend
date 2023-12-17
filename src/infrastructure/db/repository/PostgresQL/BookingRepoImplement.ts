@@ -23,7 +23,16 @@ class BookingRepoImplement implements BookingRepo {
                 ...filter
             },
             include: {
-                equipments: true
+                equipments: true,
+                users: {
+                    select: {
+                        id: true,
+                        roles: true,
+                        first_name: true,
+                        second_name: true,
+                        mail: true
+                    }
+                }
             },
             skip,
             take

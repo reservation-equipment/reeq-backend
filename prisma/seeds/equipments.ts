@@ -23,9 +23,6 @@ export async function areas() {
                 }
             });
 
-        console.log(data)
-
-
         await prisma.equipments.createMany({
             data: data as any
         })

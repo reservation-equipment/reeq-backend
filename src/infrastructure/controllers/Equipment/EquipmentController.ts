@@ -14,7 +14,6 @@ export class EquipmentController {
                 name: name as string,
                 status: status as EquipmentStatus
             })
-            console.log(req.query)
             res.send({
                 msg: "Оборудование получено",
                 data

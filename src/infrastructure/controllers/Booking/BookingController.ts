@@ -8,8 +8,18 @@ export class BookingController {
 
     async getBookings(req: Request, res: Response, next: NextFunction) {
         try {
-            const {filter, skip, take} = req.body
-            const bookings = await this.bookingService.getBookings(filter, skip, take)
+            const filter: {
+                date_to?: string
+            } = {};
+            const {date_to, skip, take} = req.query
+            if(date_to) {
+                filter.date_to = date_to as string
+            }
+            if(skip) {
+
+            }
+
+            const bookings = await this.bookingService.getBookings(filter, skip ? Number(skip) : undefined, take ? Number(take) : undefined)
             res.send({
                 msg: 'Бронирования успешно получены!',
                 data: bookings
