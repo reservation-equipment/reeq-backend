@@ -12,8 +12,8 @@ import {bookingRoutes} from "./infrastructure/routes/rest/BookingRoutes";
 
 
 dotenv.config();
-
 const app = express();
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({

@@ -24,18 +24,29 @@ export class EquipmentRepoImplement implements EquipmentRepo {
         });
     }
 
-    getByFieldName(fieldName: string): Equipment {
+    async getByFieldName(fieldName: string): Promise<Equipment> {
         return defaultReturnObj
     }
 
-    async getAll(filter: EquipmentFilter): Promise<Equipment[]> {
+    async getCountRows(): Promise<any> {
+        return prisma.equipments.aggregate({
+            _count: true
+        })
+    }
+
+    async getAll(filter: EquipmentFilter, skip: string, take: string): Promise<Equipment[]> {
+        console.log(await prisma.equipments.aggregate({
+            _count: true
+        }))
         return prisma.equipments.findMany({
             where: {
                 name: {
                     startsWith: filter?.name
                 },
                 status: filter?.status
-            }
+            },
+            skip: skip ? Number(skip) : undefined,
+            take: take ? Number(take) : undefined,
         });
     }
 

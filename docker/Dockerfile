@@ -17,9 +17,9 @@ RUN npx prisma generate
 # Copy folder project
 COPY . .
 
-# Build
-RUN npm run build
+## Build
+#RUN npm run build
 
-EXPOSE 8000
+EXPOSE 3005
 
-CMD ["node", "build/app.js"]
+CMD ["npm", "run", "dev"]

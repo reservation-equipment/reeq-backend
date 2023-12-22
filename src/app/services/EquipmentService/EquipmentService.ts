@@ -11,8 +11,14 @@ export class EquipmentService {
     constructor(public equipmentRepo: EquipmentRepo) {
     }
 
-    async getAllEquipments(filter: EquipmentFilter) {
-        return this.equipmentRepo.getAll(filter)
+    async getAllEquipments(filter: EquipmentFilter, skip?: string, take?: string) {
+        const count = await this.equipmentRepo.getCountRows();
+        const data = await this.equipmentRepo.getAll(filter, skip, take)
+
+        return {
+            data,
+            count
+        }
     }
 
     async addNewEquipment(fields: addProductDto) {

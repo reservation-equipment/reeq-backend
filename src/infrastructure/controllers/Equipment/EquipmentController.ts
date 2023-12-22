@@ -9,14 +9,16 @@ export class EquipmentController {
 
     async getAllEquipments(req: Request, res: Response, next: NextFunction) {
         try {
-            const {name, status} = req.query;
-            const data = await this.equipmentService.getAllEquipments({
+            const {name, status, skip, take} = req.query;
+            const {data, count} = await this.equipmentService.getAllEquipments({
                 name: name as string,
-                status: status as EquipmentStatus
-            })
+                status: status as EquipmentStatus,
+            }, skip as string, take as string)
+
             res.send({
                 msg: "Оборудование получено",
-                data
+                data,
+                count
             })
         } catch (e: any) {
             next(e)

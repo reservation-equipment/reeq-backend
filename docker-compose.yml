@@ -4,7 +4,7 @@ services:
   db:
     container_name: db
     image: postgres:14.9-alpine
-#    restart: always
+    restart: unless-stopped
     volumes:
       - db_volume:/var/lib/postgresql/data
     ports:
@@ -15,10 +15,14 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
   reeq-backend:
     restart: always
+    volumes:
+      - ./src:/usr/src/reeq-backend/src
+      - /usr/src/reeq-backend/node_modules
     build:
+      context: ./
       dockerfile: docker/Dockerfile
     ports:
-      - "3000:3000"
+      - "${DOCKER_DEV_PORT}:${DOCKER_DEV_PORT}"
     depends_on:
       - db
     environment:
@@ -27,7 +31,9 @@ services:
       - DB_NAME=${DB_NAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PORT=${DB_PORT}
+      - DB_EXTERNAL_PORT=${DB_EXTERNAL_PORT}
       - DB_SSLMODE=${DB_SSLMODE}
+      - PORT=${DOCKER_DEV_PORT}
 volumes:
   db_volume:
     external: true
