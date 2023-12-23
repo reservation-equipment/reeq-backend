@@ -1,4 +1,4 @@
-docker_backend:build:
+docker_backend_build:
 	docker-compose up -d --build reeq-backend
-docker:build:
+docker_build:
 	docker-compose up -d --build

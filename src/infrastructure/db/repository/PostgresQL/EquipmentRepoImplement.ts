@@ -43,7 +43,7 @@ export class EquipmentRepoImplement implements EquipmentRepo {
         return prisma.equipments.findMany({
             where: {
                 name: {
-                    startsWith: filter?.name
+                    contains: filter?.name
                 },
                 status: filter?.status
             },

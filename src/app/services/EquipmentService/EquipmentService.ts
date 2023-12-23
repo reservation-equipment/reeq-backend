@@ -14,7 +14,6 @@ export class EquipmentService {
     async getAllEquipments(filter: EquipmentFilter, skip?: string, take?: string) {
         const count = await this.equipmentRepo.getCountRows(filter);
         const data = await this.equipmentRepo.getAll(filter, skip, take)
-        console.log(filter, skip, take)
 
         return {
             data,
