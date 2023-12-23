@@ -34,7 +34,6 @@ export class BookingService {
     }
 
     async getBookings(filter: object, skip: number | undefined, take: number | undefined) {
-        console.log(filter, skip, take)
         return this.bookingRepo.getByFilter(filter, skip, take)
     }
 }

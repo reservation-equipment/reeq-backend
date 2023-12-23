@@ -4,7 +4,7 @@ import {dataEquipments} from "./data/data.js";
 
 const prisma = new PrismaClient()
 
-export async function areas() {
+export async function equipments() {
     const areasIds = await prisma.areas.findMany({
         select: {
             id: true,
@@ -12,7 +12,6 @@ export async function areas() {
         }
     })
 
-    console.log(areasIds)
     for (const {id, name} of areasIds) {
         const data = dataEquipments
             .find((item) => item?.area_name === name)?.inventory
@@ -33,5 +32,6 @@ export async function areas() {
     // console.log(JSON.parse())
 
 }
-areas()
+// areas()
 
+equipments()

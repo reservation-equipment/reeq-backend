@@ -10,5 +10,5 @@ export interface EquipmentRepo {
     add(equipment: addProductDto): Promise<Equipment>
     delete(id: number): Promise<Equipment>
     update(equipment: updateEquipmentDto): Promise<Equipment>
-    getCountRows(): Promise<any>
+    getCountRows(filter: EquipmentFilter): Promise<any>
 }

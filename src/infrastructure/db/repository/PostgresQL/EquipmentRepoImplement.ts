@@ -28,16 +28,18 @@ export class EquipmentRepoImplement implements EquipmentRepo {
         return defaultReturnObj
     }
 
-    async getCountRows(): Promise<any> {
+    async getCountRows(filter: EquipmentFilter): Promise<any> {
         return prisma.equipments.aggregate({
-            _count: true
+            _count: true,
+            where: {
+                name: {
+                    startsWith: filter?.name
+                },
+            }
         })
     }
 
     async getAll(filter: EquipmentFilter, skip: string, take: string): Promise<Equipment[]> {
-        console.log(await prisma.equipments.aggregate({
-            _count: true
-        }))
         return prisma.equipments.findMany({
             where: {
                 name: {

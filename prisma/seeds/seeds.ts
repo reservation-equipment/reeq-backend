@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 async function main() {
     await institutes();
     await areas()
-
+    await equip
 
 }
 

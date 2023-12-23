@@ -10,7 +10,7 @@
     "start": "npm run build && node --es-module-specifier-resolution=node build/src/app.js",
     "docker_build": "docker-compose up -d --build",
     "migrate": "npx prisma migrate dev --name",
-    "seed": "ts-node prisma/seeds/seeds.ts"
+    "seed": "node --loader ts-node/esm prisma/seeds/seeds.ts"
   },
   "type": "module",
   "keywords": [],
