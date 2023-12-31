@@ -5,10 +5,11 @@ import {
 import {addProductDto} from "../../repositories/dto/addEquipmentDto";
 import {Equipment} from "../../models/Equipment/Equipment";
 import {EquipmentFilter} from "../../../infrastructure/shared/types/Equipment";
+import {uploadService, UploadService} from "../UploadService/UploadService";
 
 
 export class EquipmentService {
-    constructor(public equipmentRepo: EquipmentRepo) {
+    constructor(public equipmentRepo: EquipmentRepo, private uploadService: UploadService) {
     }
 
     async getAllEquipments(filter: EquipmentFilter, skip?: string, take?: string) {
@@ -22,7 +23,9 @@ export class EquipmentService {
     }
 
     async addNewEquipment(fields: addProductDto) {
-        return await this.equipmentRepo.add(fields)
+        const {image_equipment, ...othersFields} = fields
+        // await this.uploadService.UploadImages(image_equipment);
+        return await this.equipmentRepo.add(othersFields)
     }
 
     async getEquipmentById(id: number) {
@@ -38,4 +41,4 @@ export class EquipmentService {
     }
 }
 
-export const equipmentService = new EquipmentService(postgresEquipmentRepository)
+export const equipmentService = new EquipmentService(postgresEquipmentRepository, uploadService)

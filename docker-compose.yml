@@ -38,3 +38,5 @@ services:
 volumes:
   db_volume:
     external: true
+  image_uploads_reeq:
+    external: false
