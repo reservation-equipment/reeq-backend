@@ -4,8 +4,7 @@ import {prisma} from "../db/orm/prisma/PrismaClient";
 import {uploadService} from "../../app/services/UploadService/UploadService";
 import {default as EasyYandexS3} from "easy-yandex-s3";
 import process from "process";
-import aws from "aws-sdk"
-import * as AWS from "aws-sdk";
+import S3 from 'aws-sdk/clients/s3';
 
 
 
@@ -23,22 +22,18 @@ import * as AWS from "aws-sdk";
 //     }
 // })
 // const upload = multer({ storage: storage })
-let s3 = new aws.S3({
+let s3 = new S3({
     endpoint: 'https://storage.yandexcloud.net',
-        accessKeyId: process.env.YANDEX_S3_ACCESS_KEY_ID as string,
-        secretAccessKey: process.env.YANDEX_S3_SECRET_KEY as string,
-    // auth: {
-    // },
+    apiVersion: "latest",
+    accessKeyId: process.env.YANDEX_S3_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.YANDEX_S3_SECRET_KEY as string,
     region: 'us-east-1',
     httpOptions: {
         timeout: 10000,
         connectTimeout: 10000,
     },
-    Bucket: '',
-    debug: false,
 });
 
-    console.log(EasyYandexS3, typeof EasyYandexS3, process.env.YANDEX_S3_ACCESS_KEY_ID, process.env.YANDEX_S3_SECRET_KEY )
     // @ts-ignore
     // let s3 = new EasyYandexS3({
     //     auth: {
@@ -56,9 +51,24 @@ export const UploadMiddleware = () => {
         // const {id} = req.query;
         if(req.files) {
             for (let file of req.files) {
-                const {buffer} = file;
+                const {buffer,originalname } = file;
+                console.log(file)
+                const params = {
+                    Bucket: 'reeq-files',
+                    Key: originalname,
+                    Body: buffer,
+                    ACL: 'public-read',
+                    ContentType: "images/*",
+
+                }
                 try {
-                    let upload = await s3?.Upload({ buffer }, '/images/'); // Загрузка в бакет
+                    let upload =  s3.upload(params, (err: any, data: any) => {
+                            if (err) {
+                                console.error(err);
+                            } else {
+                                console.log(`Image uploaded successfully. File URL: ${data.Location}`);
+                            }
+                        }); // Загрузка в бакет
                     console.log(upload)
                     res.send(upload);
                 } catch (e: any) {
