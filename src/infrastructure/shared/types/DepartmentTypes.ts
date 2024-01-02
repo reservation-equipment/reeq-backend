@@ -4,3 +4,8 @@ export type FullInfoTableDepartment = {
     area: string
     equipment: string
 }
+
+export type FilterDepartmentsInfo = {
+    skip: number
+    take: number
+}

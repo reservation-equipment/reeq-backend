@@ -4,7 +4,7 @@ services:
   db:
     container_name: db
     image: postgres:14.9-alpine
-    restart: unless-stopped
+    restart: always
     volumes:
       - db_volume:/var/lib/postgresql/data
     ports:

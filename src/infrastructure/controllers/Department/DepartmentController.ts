@@ -34,7 +34,12 @@ export class DepartmentController {
 
     async getInstituteWithFullInfo(req: Request, res: Response, next: NextFunction) {
         try {
-            const info = await this.departmentService.getInstituteWithFullInfo()
+            const {skip, take} = req.query
+
+            const info = await this.departmentService.getInstituteWithFullInfo({
+                skip: Number(skip),
+                take: Number(take)
+            })
             res.send({
                 msg: "success",
                 data: info

@@ -1,6 +1,6 @@
 import {DepartmentRepo} from "../../repositories/DepartmentRepo";
 import {postgresDepartmentRepository} from "../../../infrastructure/db/repository/PostgresQL/DepartmentRepoImplement";
-import {FullInfoTableDepartment} from "../../../infrastructure/shared/types/DepartmentTypes";
+import {FilterDepartmentsInfo, FullInfoTableDepartment} from "../../../infrastructure/shared/types/DepartmentTypes";
 import {Equipment} from "../../models/Equipment/Equipment";
 
 
@@ -16,8 +16,8 @@ export class DepartmentService {
         return this.departmentRepo.getById(id)
     }
 
-    async getInstituteWithFullInfo() {
-        const info = this.departmentRepo.getAllFullInfo()
+    async getInstituteWithFullInfo(filter: FilterDepartmentsInfo) {
+        const info = this.departmentRepo.getAllFullInfo(filter)
         const new_info: FullInfoTableDepartment[] = [];
         (await info)?.forEach((institute: any) => {
             return institute.areas.forEach((area: any) => {

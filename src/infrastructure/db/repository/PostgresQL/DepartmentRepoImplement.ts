@@ -1,6 +1,7 @@
 import {DepartmentRepo} from "../../../../app/repositories/DepartmentRepo";
 import {Department} from "../../../../app/models/Department/Department";
 import {prisma} from "../../orm/prisma/PrismaClient";
+import {FilterDepartmentsInfo} from "../../../shared/types/DepartmentTypes";
 
 
 export class DepartmentRepoImplement implements DepartmentRepo {
@@ -15,7 +16,8 @@ export class DepartmentRepoImplement implements DepartmentRepo {
         return prisma.institutes.findMany()
     }
 
-    async getAllFullInfo() {
+    async getAllFullInfo(filter: FilterDepartmentsInfo) {
+        const {skip, take} = filter
         return prisma.institutes.findMany({
             select: {
                 name: true,
@@ -30,7 +32,9 @@ export class DepartmentRepoImplement implements DepartmentRepo {
                         }
                     }
                 }
-            }
+            },
+            // take,
+            // skip
         })
     }
 }
