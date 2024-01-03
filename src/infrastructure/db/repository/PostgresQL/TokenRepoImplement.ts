@@ -30,7 +30,6 @@ class TokenRepoImplement implements TokenRepo {
     }
 
     async update(userId: number, token: string): Promise<Token | null> {
-        // @ts-ignore
         return prisma.tokens.update({
             data: {
                 refresh_token: token
@@ -42,7 +41,6 @@ class TokenRepoImplement implements TokenRepo {
     }
 
     async delete(field: any) {
-        // @ts-ignore
         return prisma.tokens.delete({
             where: {
                 refresh_token: field

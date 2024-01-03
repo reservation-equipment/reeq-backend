@@ -10,7 +10,7 @@ export class Booking {
         public date_to: Date,
         public created_at: Date,
         public updated_at: Date,
-        public status: BookingStatus,
+        public status: keyof typeof BookingStatus,
         public equipments: Equipment | null
     ) {
     }

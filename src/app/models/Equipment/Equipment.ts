@@ -7,7 +7,7 @@ export class Equipment {
         public name: string,
         public description: string | null,
         public count: number,
-        public status: EquipmentStatus
+        public status: keyof typeof EquipmentStatus
     ) {
     }
 }

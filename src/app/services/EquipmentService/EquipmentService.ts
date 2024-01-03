@@ -12,7 +12,7 @@ export class EquipmentService {
     constructor(public equipmentRepo: EquipmentRepo, private uploadService: UploadService) {
     }
 
-    async getAllEquipments(filter: EquipmentFilter, skip?: string, take?: string) {
+    async getAllEquipments(filter: EquipmentFilter, skip?: number, take?: number) {
         const count = await this.equipmentRepo.getCountRows(filter);
         const data = await this.equipmentRepo.getAll(filter, skip, take)
 

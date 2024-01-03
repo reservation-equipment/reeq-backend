@@ -3,7 +3,7 @@ import {addProductDto} from "../../../../app/repositories/dto/addEquipmentDto.js
 import {Equipment} from "../../../../app/models/Equipment/Equipment.js";
 import {prisma} from "../../orm/prisma/PrismaClient.js";
 import {updateEquipmentDto} from "../../../../app/repositories/dto/updateEquipmentDto";
-import {EquipmentFilter} from "../../../shared/types/Equipment";
+import {EquipmentFilter, EquipmentStatus} from "../../../shared/types/Equipment";
 
 
 const defaultReturnObj: Equipment = {
@@ -12,7 +12,7 @@ const defaultReturnObj: Equipment = {
     id: 0,
     description: "",
     area_id: 0,
-    status: "FREE"
+    status: EquipmentStatus.FREE
 }
 
 export class EquipmentRepoImplement implements EquipmentRepo {
@@ -39,7 +39,7 @@ export class EquipmentRepoImplement implements EquipmentRepo {
         })
     }
 
-    async getAll(filter: EquipmentFilter, skip: string, take: string): Promise<Equipment[]> {
+    async getAll(filter: EquipmentFilter, skip: number, take: number): Promise<Equipment[]> {
         return prisma.equipments.findMany({
             where: {
                 name: {
@@ -47,8 +47,8 @@ export class EquipmentRepoImplement implements EquipmentRepo {
                 },
                 status: filter?.status
             },
-            skip: skip ? Number(skip) : undefined,
-            take: take ? Number(take) : undefined,
+            skip,
+            take,
         });
     }
 

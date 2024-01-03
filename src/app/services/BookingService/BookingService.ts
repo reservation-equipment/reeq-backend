@@ -3,17 +3,28 @@ import {postgresBookingRepository} from "../../../infrastructure/db/repository/P
 import {addBookingDto} from "../../repositories/dto/addBookingDto";
 import {EquipmentRepo} from "../../repositories/EquipmentRepo";
 import {postgresEquipmentRepository} from "../../../infrastructure/db/repository/PostgresQL/EquipmentRepoImplement";
-import {updateBookingDto} from "../../repositories/dto/updateBookingDto";
+import {EquipmentStatus} from "../../../infrastructure/shared/types/Equipment";
+import {BookingStatus} from "../../../infrastructure/shared/types/Booking";
 
 
 export class BookingService {
     constructor(private bookingRepo: BookingRepo, private equipmentRepo: EquipmentRepo) {
     }
 
+    async isBooking(id: number) {
+        const booking = await this.equipmentRepo.getById(id)
+        return booking?.status === EquipmentStatus.BOOKED
+    }
+
+
     async CreateBooking(bookingData: addBookingDto) {
+        const {equipment_id} = bookingData
+        if(await this.isBooking(equipment_id)) {
+            throw Error("Оборудование уже забронировано!")
+        }
         await this.equipmentRepo.update({
-            id: bookingData.equipment_id,
-            status: "BOOKED"
+            id: equipment_id,
+            status: EquipmentStatus.BOOKED
         })
         return this.bookingRepo.add(bookingData)
     }
@@ -25,11 +36,11 @@ export class BookingService {
     async closeBooking(bookingId: number, equipmentId: number) {
         await this.equipmentRepo.update({
             id: equipmentId,
-            status: "FREE"
+            status: EquipmentStatus.FREE
         })
         return this.bookingRepo.update({
             id: bookingId,
-            status: "COMPLETE",
+            status: BookingStatus.COMPLETE,
         })
     }
 

@@ -13,7 +13,7 @@ export class EquipmentController {
             const {data, count} = await this.equipmentService.getAllEquipments({
                 name: name as string,
                 status: status as EquipmentStatus,
-            }, skip as string, take as string)
+            }, Number(skip), Number(take))
 
             res.send({
                 msg: "Оборудование получено",

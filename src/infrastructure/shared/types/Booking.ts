@@ -1,1 +1,5 @@
-export type BookingStatus = "CREATED" | "COMPLETE" | "EXPIRED"
+export enum BookingStatus {
+    CREATED= "CREATED",
+    COMPLETE = "COMPLETE",
+    EXPIRED = "EXPIRED"
+}
