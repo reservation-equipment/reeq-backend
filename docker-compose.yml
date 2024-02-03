@@ -18,6 +18,7 @@ services:
     volumes:
       - ./src:/usr/src/reeq-backend/src
       - /usr/src/reeq-backend/node_modules
+      - ./prisma:/usr/src/reeq-backend/prisma
     build:
       context: ./
       dockerfile: docker/Dockerfile
@@ -39,6 +40,7 @@ services:
       - YANDEX_S3_SECRET_KEY=${YANDEX_S3_SECRET_KEY}
       - YANDEX_S3_ENDPOINT=${YANDEX_S3_ENDPOINT}
       - YANDEX_S3_REGION=${YANDEX_S3_REGION}
+      - DATABASE_URL=${DATABASE_URL_DOCKER}
 volumes:
   db_volume:
     external: true

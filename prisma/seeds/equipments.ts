@@ -22,6 +22,8 @@ export async function equipments() {
                 }
             });
 
+        console.log(data?.length)
+
         await prisma.equipments.createMany({
             data: data as any
         })

@@ -2,9 +2,7 @@ import * as process from "process";
 import S3, {PutObjectRequest} from "aws-sdk/clients/s3";
 
 export class UploadService {
-    constructor(public yandexS3: any) {
-    }
-
+    constructor(public yandexS3: any) {}
 
     async UploadImagesYandexS3(params: PutObjectRequest) {
         try {

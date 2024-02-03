@@ -3,6 +3,7 @@ import {Booking} from "../../../../app/models/Booking/Booking";
 import {addBookingDto} from "../../../../app/repositories/dto/addBookingDto";
 import {prisma} from "../../orm/prisma/PrismaClient";
 import {updateBookingDto} from "../../../../app/repositories/dto/updateBookingDto";
+import * as console from "console";
 
 
 class BookingRepoImplement implements BookingRepo {
@@ -17,11 +18,16 @@ class BookingRepoImplement implements BookingRepo {
         })
     }
 
-    async getByFilter(filter: object, skip: number, take: number): Promise<Booking[] | null> {
+    async getByFilter(date_to: string, skip: number, take: number): Promise<Booking[] | null> {
+
         return prisma.booking.findMany({
-            where: {
-                ...filter
-            },
+            ...(
+                date_to ? {
+                    where: {
+                        date_to: new Date(date_to)
+                    },
+                } : {}
+            ),
             include: {
                 equipments: true,
                 users: {
@@ -39,6 +45,10 @@ class BookingRepoImplement implements BookingRepo {
         })
     }
 
+    /**
+     * Добавление бронирования в БД
+     * @param booking
+     */
     async add(booking: addBookingDto): Promise<Booking> {
         return prisma.booking.create({
             data: {
@@ -60,6 +70,12 @@ class BookingRepoImplement implements BookingRepo {
                 id
             }
         })
+    }
+
+    async getByField(fields: object) {
+        return prisma.booking.findMany({
+            select: fields,
+        });
     }
 }
 

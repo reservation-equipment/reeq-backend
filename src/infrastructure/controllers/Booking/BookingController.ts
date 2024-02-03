@@ -1,5 +1,6 @@
 import {bookingService, BookingService} from "../../../app/services/BookingService/BookingService";
 import {NextFunction, Request, Response} from "express";
+import * as console from "console";
 
 
 export class BookingController {
@@ -8,18 +9,10 @@ export class BookingController {
 
     async getBookings(req: Request, res: Response, next: NextFunction) {
         try {
-            const filter: {
-                date_to?: string
-            } = {};
+
             const {date_to, skip, take} = req.query
-            if(date_to) {
-                filter.date_to = date_to as string
-            }
-            if(skip) {
 
-            }
-
-            const bookings = await this.bookingService.getBookings(filter, skip ? Number(skip) : undefined, take ? Number(take) : undefined)
+            const bookings = await this.bookingService.getBookings(date_to as string, skip ? Number(skip) : undefined, take ? Number(take) : undefined)
             res.send({
                 msg: 'Бронирования успешно получены!',
                 data: bookings
@@ -32,7 +25,7 @@ export class BookingController {
     async createBooking(req: Request, res: Response, next: NextFunction) {
         try {
             const bookingInfo = req.body
-            console.log(bookingInfo)
+            console.log(typeof bookingInfo.date_to, typeof bookingInfo.date_from)
             const createdBooking = await this.bookingService.CreateBooking(bookingInfo)
             res.send({
                 msg: `Оборудование ${createdBooking.equipments?.name} успешно забронировано`,
@@ -46,6 +39,7 @@ export class BookingController {
     async getBookingByUserId(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = Number(req.params.userId)
+            console.log(req.params.userId, userId)
             const listBookings = await this.bookingService.getBookingByUserId(userId)
             res.send({
                 msg: `Бронирования юзера успешно получены`,
@@ -64,6 +58,18 @@ export class BookingController {
             res.send({
                 msg: "Бронь успешно закрыта!",
                 data: closedBooking
+            })
+        } catch (e) {
+            next(e)
+        }
+    }
+
+    async getBookingDateLists(req: Request, res: Response, next: NextFunction) {
+        try {
+            const dates = await this.bookingService.getDatesBooking()
+            res.send({
+                msg: "Даты бронирования успешно получены!",
+                data: dates
             })
         } catch (e) {
             next(e)

@@ -5,6 +5,7 @@ import {EquipmentRepo} from "../../repositories/EquipmentRepo";
 import {postgresEquipmentRepository} from "../../../infrastructure/db/repository/PostgresQL/EquipmentRepoImplement";
 import {EquipmentStatus} from "../../../infrastructure/shared/types/Equipment";
 import {BookingStatus} from "../../../infrastructure/shared/types/Booking";
+import {ErrorsHandler} from "../../../infrastructure/controllers/Errors/ErrorsController";
 
 
 export class BookingService {
@@ -16,17 +17,26 @@ export class BookingService {
         return booking?.status === EquipmentStatus.BOOKED
     }
 
-
+    /**
+     * Создание брони конкретного оборудования в БД
+     * @param bookingData
+     * @constructor
+     */
     async CreateBooking(bookingData: addBookingDto) {
         const {equipment_id} = bookingData
+
         if(await this.isBooking(equipment_id)) {
-            throw Error("Оборудование уже забронировано!")
+            throw ErrorsHandler.BadRequest("Оборудование уже забронировано!" )
         }
+
+        const addedBooking = this.bookingRepo.add(bookingData)
+
         await this.equipmentRepo.update({
             id: equipment_id,
             status: EquipmentStatus.BOOKED
         })
-        return this.bookingRepo.add(bookingData)
+
+        return addedBooking
     }
 
     async getBookingByUserId(userId: number) {
@@ -44,8 +54,15 @@ export class BookingService {
         })
     }
 
-    async getBookings(filter: object, skip: number | undefined, take: number | undefined) {
-        return this.bookingRepo.getByFilter(filter, skip, take)
+    async getBookings(date_to: string, skip: number | undefined, take: number | undefined) {
+        return this.bookingRepo.getByFilter(date_to, skip, take)
+    }
+
+    async getDatesBooking() {
+        const filter = {
+            date_to: true
+        }
+        return this.bookingRepo.getByField(filter)
     }
 }
 

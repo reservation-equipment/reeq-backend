@@ -24,7 +24,7 @@ export class AreaRepoImplement implements AreaRepo {
                         name: true
                     }
                 }
-            }
+            },
         });
     }
 

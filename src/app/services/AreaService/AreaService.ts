@@ -4,6 +4,8 @@ import {
 } from "../../../infrastructure/db/repository/PostgresQL/AreaRepoImplement.js";
 import {addAreaDto} from "../../repositories/dto/addAreaDto.js";
 import {updateAreaDto} from "../../repositories/dto/updateAreaDto";
+import {Area} from "../../models/Area/Area";
+import {institutes} from "@prisma/client";
 
 export class AreaService {
     constructor(readonly areaRepo: AreaRepo) {
@@ -14,7 +16,11 @@ export class AreaService {
     }
 
     async getAllAreas() {
-        const data = (await this.areaRepo.getAllWithInstitutes()).map((area: any) => {
+        const data = (await this.areaRepo.getAllWithInstitutes()).map((area: Area & {
+            institutes: {
+                name: string
+            }
+        }) => {
             const {institutes, ...others} = area
             return {
                 ...others,

@@ -12,6 +12,7 @@ export class BookingRoutes implements Routes {
         router.post(`${this.initRoutePath}/create`, this.bookingController.createBooking.bind(this.bookingController))
         router.get(`${this.initRoutePath}/:userId`, this.bookingController.getBookingByUserId.bind(this.bookingController))
         router.patch(`${this.initRoutePath}/close`, this.bookingController.closeBooking.bind(this.bookingController))
+        router.get(`${this.initRoutePath}_dates`, this.bookingController.getBookingDateLists.bind(this.bookingController))
     }
 }
 
