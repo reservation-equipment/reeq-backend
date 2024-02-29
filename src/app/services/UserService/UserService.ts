@@ -12,10 +12,10 @@ export class UserService {
     }
 
     // Регистрация
-    async singUp({password, mail, second_name, first_name, role_id}: addUserDto) {
+    async singUp({password, email, second_name, first_name, role_id}: addUserDto) {
 
         // проверяем, существует ли уже такой пользователь
-        const isExistUser = await this.userRepo.getByFieldName(mail, "mail")
+        const isExistUser = await this.userRepo.getByFieldName(email, "email")
         if (isExistUser) {
             throw ErrorsHandler.BadRequest("Пользователь с таким email'ом уже существует!")
         }
@@ -25,7 +25,7 @@ export class UserService {
         const user = await this.userRepo.add(
             {
                 password: hashPassword,
-                mail,
+                email,
                 second_name,
                 first_name,
                 role_id
@@ -38,7 +38,7 @@ export class UserService {
 
     // Аутентификация
     async signIn(email: string, password: string) {
-        const user = await this.userRepo.getByFieldName(email, "mail")
+        const user = await this.userRepo.getByFieldName(email, "email")
         if(!user) {
             throw ErrorsHandler.BadRequest("Пользователь с таким email не найден")
         }

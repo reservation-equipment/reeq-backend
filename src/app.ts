@@ -25,7 +25,6 @@ app.use(
         extended: false,
     })
 );
-// app.use(express.static(`/uploads`))
 app.use(cors({
     credentials: true,
     origin: process.env.CLIENT_URL,
@@ -38,8 +37,6 @@ departmentsRoutes.initRoutes(app)
 userRoutes.initRoutes(app)
 bookingRoutes.initRoutes(app)
 uploadRoutes.initRoutes(app)
-
-app.post(`/uploads`, UploadMiddleware())
 
 app.use(ErrorMiddleware)
 

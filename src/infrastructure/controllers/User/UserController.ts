@@ -25,7 +25,7 @@ export class UserController {
             const {email, password, first_name, second_name, role_id} = req.body;
             const userInfo = await this.userService.singUp({
                 password,
-                mail: email,
+                email,
                 role_id,
                 first_name,
                 second_name

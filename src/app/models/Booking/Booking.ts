@@ -8,10 +8,10 @@ export class Booking {
         readonly equipment_id: number,
         public date_from: Date,
         public date_to: Date,
-        public created_at: Date,
-        public updated_at: Date,
         public status: keyof typeof BookingStatus,
-        public equipments: Equipment | null
+        public equipments: Equipment | null,
+        public created_at?: Date,
+        public updated_at?: Date,
     ) {
     }
 }

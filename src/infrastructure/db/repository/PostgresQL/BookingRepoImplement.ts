@@ -36,7 +36,7 @@ class BookingRepoImplement implements BookingRepo {
                         roles: true,
                         first_name: true,
                         second_name: true,
-                        mail: true
+                        email: true
                     }
                 }
             },

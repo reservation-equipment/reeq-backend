@@ -5,11 +5,13 @@ export class User {
                 public first_name: string | null,
                 public second_name: string | null,
                 public password: string,
-                public mail: string,
+                public email: string,
                 public role_id: number | null,
                 public roles: {
                     role: UserRoles
-                } | null
+                } | null,
+                public created_at?: Date,
+                public updated_at?: Date,
     ) {
     }
 }

@@ -1,0 +1,754 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.9
+-- Dumped by pg_dump version 14.9
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: Roles; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."Roles" AS ENUM (
+    'OWNER',
+    'ADMIN',
+    'USER'
+);
+
+
+ALTER TYPE public."Roles" OWNER TO postgres;
+
+--
+-- Name: StatusBooking; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."StatusBooking" AS ENUM (
+    'CREATED',
+    'COMPLETE',
+    'EXPIRED'
+);
+
+
+ALTER TYPE public."StatusBooking" OWNER TO postgres;
+
+--
+-- Name: StatusEquipment; Type: TYPE; Schema: public; Owner: postgres
+--
+
+CREATE TYPE public."StatusEquipment" AS ENUM (
+    'FREE',
+    'BOOKED'
+);
+
+
+ALTER TYPE public."StatusEquipment" OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public._prisma_migrations (
+    id character varying(36) NOT NULL,
+    checksum character varying(64) NOT NULL,
+    finished_at timestamp with time zone,
+    migration_name character varying(255) NOT NULL,
+    logs text,
+    rolled_back_at timestamp with time zone,
+    started_at timestamp with time zone DEFAULT now() NOT NULL,
+    applied_steps_count integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public._prisma_migrations OWNER TO postgres;
+
+--
+-- Name: areas; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.areas (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    square integer,
+    appointment text,
+    institutes_id integer NOT NULL,
+    description text,
+    address character varying(255)
+);
+
+
+ALTER TABLE public.areas OWNER TO postgres;
+
+--
+-- Name: areas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.areas_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.areas_id_seq OWNER TO postgres;
+
+--
+-- Name: areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.areas_id_seq OWNED BY public.areas.id;
+
+
+--
+-- Name: booking; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.booking (
+    id integer NOT NULL,
+    date_from timestamp without time zone NOT NULL,
+    date_to timestamp without time zone NOT NULL,
+    created_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    user_id integer NOT NULL,
+    equipment_id integer NOT NULL,
+    status public."StatusBooking" DEFAULT 'CREATED'::public."StatusBooking" NOT NULL
+);
+
+
+ALTER TABLE public.booking OWNER TO postgres;
+
+--
+-- Name: booking_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.booking_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.booking_id_seq OWNER TO postgres;
+
+--
+-- Name: booking_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.booking_id_seq OWNED BY public.booking.id;
+
+
+--
+-- Name: equipments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.equipments (
+    id integer NOT NULL,
+    area_id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    description text,
+    count integer NOT NULL,
+    status public."StatusEquipment" DEFAULT 'FREE'::public."StatusEquipment" NOT NULL,
+    img_hrefs text[]
+);
+
+
+ALTER TABLE public.equipments OWNER TO postgres;
+
+--
+-- Name: equipments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.equipments_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.equipments_id_seq OWNER TO postgres;
+
+--
+-- Name: equipments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.equipments_id_seq OWNED BY public.equipments.id;
+
+
+--
+-- Name: institutes; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.institutes (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.institutes OWNER TO postgres;
+
+--
+-- Name: institutes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.institutes_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.institutes_id_seq OWNER TO postgres;
+
+--
+-- Name: institutes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.institutes_id_seq OWNED BY public.institutes.id;
+
+
+--
+-- Name: roles; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.roles (
+    id integer NOT NULL,
+    role public."Roles" DEFAULT 'USER'::public."Roles" NOT NULL
+);
+
+
+ALTER TABLE public.roles OWNER TO postgres;
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.roles_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.roles_id_seq OWNER TO postgres;
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.roles_id_seq OWNED BY public.roles.id;
+
+
+--
+-- Name: tokens; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tokens (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    refresh_token text NOT NULL
+);
+
+
+ALTER TABLE public.tokens OWNER TO postgres;
+
+--
+-- Name: tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tokens_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tokens_id_seq OWNER TO postgres;
+
+--
+-- Name: tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.tokens_id_seq OWNED BY public.tokens.id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    role_id integer,
+    first_name character varying(70),
+    second_name character varying(70),
+    email character varying(70) NOT NULL,
+    password text NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: areas id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.areas ALTER COLUMN id SET DEFAULT nextval('public.areas_id_seq'::regclass);
+
+
+--
+-- Name: booking id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.booking ALTER COLUMN id SET DEFAULT nextval('public.booking_id_seq'::regclass);
+
+
+--
+-- Name: equipments id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.equipments ALTER COLUMN id SET DEFAULT nextval('public.equipments_id_seq'::regclass);
+
+
+--
+-- Name: institutes id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.institutes ALTER COLUMN id SET DEFAULT nextval('public.institutes_id_seq'::regclass);
+
+
+--
+-- Name: roles id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.roles ALTER COLUMN id SET DEFAULT nextval('public.roles_id_seq'::regclass);
+
+
+--
+-- Name: tokens id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tokens ALTER COLUMN id SET DEFAULT nextval('public.tokens_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
+2204737d-c216-4c99-9b0e-cb351aade851	cb761cc55859ca92929762de05a93aacbf8a0ef9905aac7c6725236240efb5b2	2024-02-02 19:03:31.250659+00	20231202215237_add_expired_status_upper_case	\N	\N	2024-02-02 19:03:31.230989+00	1
+55575171-f9eb-416a-8e07-611fb4a42fc3	2c857661f3bfb1d777c6c4356724617e3e50ec36d4572d2bbbc6d711ec97f26a	2024-02-02 19:03:31.056597+00	20231116190254_init	\N	\N	2024-02-02 19:03:31.007075+00	1
+e28148ac-ec0e-40fc-abad-53bc5d73a765	bb92b3c82d0a0d517f99617549db4f8d02f46273f09a35901f898b03e34492f2	2024-02-02 19:03:31.069978+00	20231116190725_init	\N	\N	2024-02-02 19:03:31.05989+00	1
+4a0bfe9a-1545-47b9-a99e-9d1298fa33a3	2601796033f17e2fcc54f7184742f01c81ef94818f0e50a919236bb4b87ff155	2024-02-03 11:17:54.489025+00	20240203111754_add_field_address_to_areas_table	\N	\N	2024-02-03 11:17:54.481039+00	1
+e6a7307e-ad79-412b-8a8d-0ba1decf700e	7dcf4c1a7b0d2c5db134104d5885c9c2e700433d6a956d5b9f73f12994c96eb0	2024-02-02 19:03:31.083481+00	20231116193029_init	\N	\N	2024-02-02 19:03:31.073164+00	1
+f1d0b986-fda2-4be8-bd36-10f91e33a148	7ff7b756f274c06ec59bbd65565bc1253d5e9c7cbc271e09c7b2d38e6d754c7e	2024-02-02 19:03:31.265728+00	20231203101053_delete_reference_areas_from_booking	\N	\N	2024-02-02 19:03:31.254719+00	1
+17d01ecd-63f7-421b-aa38-0facc86ad698	60a3e2cc1251716dff9441557138009733676aba3882b17400cb1f6244fea441	2024-02-02 19:03:31.094756+00	20231117162430_added_booking_status	\N	\N	2024-02-02 19:03:31.08697+00	1
+99d1bc27-9609-4a4f-87d9-e7651f2b8ec2	1b597c6a305403f3ce3f428cd582bd8dd1562652ade8f245af148ecf93a1758f	2024-02-02 19:03:31.104381+00	20231124212135_init	\N	\N	2024-02-02 19:03:31.096967+00	1
+843bc883-ee58-4a08-8b8c-b7b833078859	7249144cb14f1b9046a6e08d828d964ea846517511a59b5b08ad3c3ee688c5f9	2024-02-02 19:03:31.11727+00	20231124212807_init	\N	\N	2024-02-02 19:03:31.106659+00	1
+c343d68a-e20c-4c26-8af4-d1475399bb38	d6b6c64ea4f066d7dae3c32742184c025a93dd652ff898ac2209c8158205bd2a	2024-02-02 19:03:31.277987+00	20231203131928_add_equipment_status	\N	\N	2024-02-02 19:03:31.269208+00	1
+f9b2fbff-4200-4e3d-9a6f-02610f15963e	3570fc0c87ce02c775a582f266079319d486fc0474dbd91122d19f708c55f1b3	2024-02-02 19:03:31.141071+00	20231125145231_create_tokens_table	\N	\N	2024-02-02 19:03:31.120602+00	1
+ed9b8cc8-18f4-4047-b2f7-1dbf91095d11	78ef82e4cc36ddebf733b270415f570457297e05a643f3a8e07b4d3eb05d6d18	2024-02-02 19:03:31.160846+00	20231125170812_tokens_users_one_to_one	\N	\N	2024-02-02 19:03:31.145274+00	1
+e08dcf21-d6ec-4d43-86b3-d7293ef1eb93	5809ea9c2fa79ba58c83ca0d41c159c586fb31da4c1946948c405a9168eaba8b	2024-02-02 19:03:31.176223+00	20231125173323_fix_text_types	\N	\N	2024-02-02 19:03:31.164756+00	1
+2a1928b9-71c1-4839-8275-ea9988496dab	b3043edf35846b9a0db51e0a826e3522182bb63c5e057df1b3c5f15b9c83e212	2024-02-02 19:03:31.291597+00	20231214190737_add_areas_description	\N	\N	2024-02-02 19:03:31.282051+00	1
+0e95165b-37aa-4c02-afcb-bf5284ea4157	550c9b6cd8561b5ccb0faaafbb94a3066492496767c92a405afb8c0c747cf715	2024-02-02 19:03:31.191209+00	20231125174209_init	\N	\N	2024-02-02 19:03:31.180278+00	1
+978eca31-50ab-4bf3-b611-8c11ef27bdd8	b78a6348fc4ea649f661bf15b9405ef336a8fc55166044b57179fea6f203bbbd	2024-02-02 19:03:31.20322+00	20231125175552_init	\N	\N	2024-02-02 19:03:31.194166+00	1
+d4b7153d-006e-4942-bb6b-569215417aee	3fe33dba59aa85e3aa82c69103c8c92f4ca6e58394deb9f42a41c1df2583adee	2024-02-02 19:03:31.213901+00	20231126144400_init	\N	\N	2024-02-02 19:03:31.205185+00	1
+9bf82ea1-927a-4099-b110-a3c1c2783eab	a5e6348f165d56e85f6ec4319e21e8e2c3246ea71bad6ea7879761e7e13dbd3e	2024-02-02 19:03:31.303134+00	20231224094259_add_equipments_images_hrefs	\N	\N	2024-02-02 19:03:31.295514+00	1
+6bfd51e0-204b-484d-a762-42550db89f86	d9e3f94e2dba775cdf5bfc1a0af808083fe4606cab8b487304886deb0fcd4ae2	2024-02-02 19:03:31.227526+00	20231202212800_add_expired_status_booking	\N	\N	2024-02-02 19:03:31.217724+00	1
+24514069-8c2f-48f8-87e1-bda72db6ed55	28e7c5ef35aaf17f5f336abce79fc91bc595696f9bdee4159da114e305ac3f93	2024-02-02 19:03:31.311969+00	20231224094557_add_equipments_images_hrefs_rename	\N	\N	2024-02-02 19:03:31.305555+00	1
+4489ea26-e2f6-4cb2-8ce6-d657f8f441e2	04bb4533467587a7d0195b761869f8b7491134c8d9022ba8c3479d58c506d012	2024-02-02 19:03:31.329861+00	20240103103636_booking_timestamptz_date	\N	\N	2024-02-02 19:03:31.31536+00	1
+65289895-866c-4691-9fb0-cb31a780ca62	45cecdf518958aab6f2174a93093db78e9210a062744a93e84649ca8cb00a641	2024-02-02 19:03:31.3422+00	20240104202453_booking_timestamp_1	\N	\N	2024-02-02 19:03:31.333608+00	1
+\.
+
+
+--
+-- Data for Name: areas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.areas (id, name, square, appointment, institutes_id, description, address) FROM stdin;
+20	Зал «Сатурн»	25	Инфраструктура объекта входит в состав Технопарка «Державинский».\nКруглые столы, клубы мышления, групповая работа, встречи технологических команд.	2	Площадка для групповой и индивидуальной работы студенческих команд.	\N
+16	Зал «Юпитер»	70	Инфраструктура объекта входит в состав Технопарка «Державинский». Стратегические сессии, питч-сессии, хакатоны, онлайн и оффлайн конференции, форумы, форсайты и пр. образовательных мероприятий и интенсивов, конференций, презентаций в онлайн и офлайн, форумов, форсайт-сессий, питч-сессий.	2	Площадка, оснащенная специализированным оборудованием для проведения акселерационных программ и оказания других видов услуг и проведения мероприятий по провождению студенческих стартапов.	\N
+17	Зал «Марс»	50	Инфраструктура объекта входит в состав Технопарка «Державинский».\nПитч-сессии, круглые столы, семинары, лекции, форсайты, соревнования, выставки и т. п. и круглых столов, выставок, мастер–классов,  презентаций, студенческих управленческих соревнований и поединков, хакатонов.	2	Площадка для групповой и индивидуальной работы студенческих команд, проведения мероприятий в рамках реализации акселерационной программы. \n	\N
+18	Студия «Мастерская MVP»	25	Площадка, предназначенная для оказания фаундерам услуг по созданию и тестированию макетов, прототипов, опытных и мелкосерийных образцов продукции на этапах от компьютерного проектирования до изготовления.	2	Инфраструктура объекта входит в состав Технопарка «Державинский».\nПитч-сессии, выставки, семинары.	\N
+19	Студия «Digital-холл»	50	Инфраструктура объекта входит в состав Технопарка «Державинский».\nМастер-класс, мастерская по проработке идей, образовательная лекция и учебная фабрика, проектная сессия, деловая игра, учебная фабрика.\n	2	Площадка для разработки дизайн продуктов, инновационных идей с целью решения сложных проблем, ориентированных на потребности человека.\n	\N
+21	Студия «IT-Room»	25	Инфраструктура объекта входит в состав Технопарка «Державинский».\nПитч-сессии, круглые столы, семинары, лекции, форсайты, выставки, мастер–классы.	2	Площадка для программирования и тестирования разработок, прототипов.	\N
+22	Зал «Меркурий»	25	Инфраструктура объекта входит в состав Технопарка «Державинский».\nВстреча без галстуков, клубы мышления, групповая работа, онлайн и оффлайн конференции.	2	Площадка для проведения заседаний, рабочих и деловых встреч, подписаний соглашений, заключений договоров, индивидуальных консультаций с индустриальными партнерами.	\N
+23	Студия «Brain-Lab»	25	Инфраструктура объекта входит в состав Технопарка «Державинский».\nДеловая игра, мастерская по проработке идей, семинары, форсайты, мастер–классы.	2	Площадка для развития креативного мышления студенческих команд.\n	\N
+24	Зал «Большая медведица» 	25	Инфраструктура объекта входит в состав Технопарка «Державинский».\nАэронет, робототехника, круглые столы, групповая работа, встречи технологических команд.	2	Площадка для рабочих встреч участников объединенных профессиональным интересом рынка НТИ (Аэронет).\n	\N
+25	Зал «Роботехники»	25	Инфраструктура объекта входит в состав Технопарка «Державинский».\nАэронет, робототехника, круглые столы, групповая работа, встречи технологических команд.\n	2	Площадка для работы кружкового движения по рынкам НТИ (Аэронет, Технет, EduNet, HomeNet).\n	\N
+26	Студия «EduGame» 	25	Инфраструктура объекта входит в состав Технопарка «Державинский».\nДеловая игра, проектная сессия, кейс-турнир, питч-сессия, бизнес-игра, образовательная лекция и учебная фабрика, мастер-класс, тестирование.\n	2	Площадка для реализации игрофицированных образовательных и акселерационных программ.\n	\N
+27	Зал «Фаэтон»	70	Инфраструктура объекта входит в состав Технопарка «Державинский».\nКоворкинг, нетворкинг.	2	Площадка коворкинг зоны для организации работы студенческих команд с разной занятостью.\n\n	\N
+28	Зал «Дальдоза»	199	Инфраструктура объекта входит в состав Технопарка «Державинский».\nФорсайт-сессия, деловая игра, проектная сессия, стратегические, онлайн и оффлайн конференции, форумов, круглые столы, лекции.	2	Конференц-зал, оснащенный специализированным аудио и видеооборудованием, предназначенный для проведения конгрессно–выставочных мероприятий в целях научно-технической и инновационной деятельности, вместимостью до 70 	\N
+29	Учебный класс  «Манкала»	47	Инфраструктура объекта входит в состав Технопарка «Державинский».\nКруглые столы, клубы мышления, групповая работа, кейс-турнир, встреча без галстуков, бизнес-игра	2	Класс для обучения студенческих команд навыкам командообразования и бизнеса в игрофицированном формате, вместимостью до 25 человек. \n\n	\N
+30	Лаборатория ИТ в профессиональной деятельности	35	Инфраструктура объекта входит в состав института экономики, управления и сервиса Тамбовского государственного университета имени Г.Р. Державина.\nТехнологический квест, учебная фабрика, деловая игра, экскурсия.	2	Лаборатория для осуществления деятельности в области внедрения информационных технологий в сферу образования, развития и формирования информационной культуры студентов. 	\N
+31	Класс деловых игр 	70	Инфраструктура объекта входит в состав института экономики, управления и сервиса Тамбовского государственного университета имени Г.Р. Державина.\nТурниры, технологический квест, форсайт-сессия, деловая игра, проектная сессия.	2	Учебный класс для эффективного обучения навыкам управления бизнес-кампаниями на ранних стадиях, умениям принимать решения при дефиците информации, противоречиях в вопросах развития бизнеса, этики и интересов различных стейкхолдеров проекта.	\N
+32	«SKолково»	210	Инфраструктура объекта входит в состав Технопарка «Державинский».\nЭкскурсия, образовательная лекция и учебная фабрика, мастерская по проработке идей, мастер-класс, проектная сессия.	2	Зал из пяти пространств, в которых располагается региональный оператор, аккредитованный Фондом «Сколково», решающий задачи поиска новых проектов, коммерциализации сервисов Фонда и синхронизации мер поддержки. 	\N
+\.
+
+
+--
+-- Data for Name: booking; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.booking (id, date_from, date_to, created_at, updated_at, user_id, equipment_id, status) FROM stdin;
+\.
+
+
+--
+-- Data for Name: equipments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.equipments (id, area_id, name, description, count, status, img_hrefs) FROM stdin;
+1	20	Стулья		20	FREE	\N
+2	20	Стол трапеция		4	FREE	\N
+3	20	Серый стол		2	FREE	\N
+4	20	Кресло-мешок		5	FREE	\N
+5	20	Флипчарт		1	FREE	\N
+6	20	ЖК телевизор (65х85) + стойка под него		1	FREE	\N
+7	20	Нетбук		1	FREE	\N
+8	16	стулья		70	FREE	\N
+9	16	стол модератора		1	FREE	\N
+10	16	флипчарт		2	FREE	\N
+11	16	кресло		5	FREE	\N
+12	16	приставная тумба		5	FREE	\N
+13	16	стойка спикера		3	FREE	\N
+14	16	видеостена	дисплеи: 9, разрешение: 1920x1080	1	FREE	\N
+15	16	ноутбук		1	FREE	\N
+16	16	кликер		1	FREE	\N
+17	16	звуковое оборудование	микшер: MIDAS DDA DM12, каналы: 12	1	FREE	\N
+18	16	микрофоны	преампы: MIDAS, количество: 8, инсерты: 8	8	FREE	\N
+19	16	AUX система		2	FREE	\N
+20	16	микрофон вокальный	Sennheiser EW 100 G4835-S-A1	1	FREE	\N
+21	16	микрофон гусиная шея	Vissonic VIS-M600	6	FREE	\N
+22	16	web камера		1	FREE	\N
+23	17	стулья		40	FREE	\N
+24	17	стол трапеция		4	FREE	\N
+25	17	кресло-мешок		5	FREE	\N
+26	17	флипчарт		2	FREE	\N
+27	17	ЖК телевизор (65х85) + стойка под него		1	FREE	\N
+28	17	нетбук		1	FREE	\N
+29	17	web-камера		1	FREE	\N
+30	18	Стол «ВЕРСТАКОФФ MECHANIC» для изготовления прототипов, выполнения ремонтных работ и хранения оборудования		1	FREE	\N
+31	18	Набор инструментов для рабочего места «JensenJTK-19» (JTK-14081)		1	FREE	\N
+32	18	3D сканер		1	FREE	\N
+33	18	3DQualityPlaneta		1	FREE	\N
+34	18	3Dlite без дополнительного ПО		1	FREE	\N
+35	18	Портативный лазерный станок «MCLaser 3020» портативный		1	FREE	\N
+36	18	Наборы гибких конструкторов для визуального прототипирования		2	FREE	\N
+37	18	Наборы радиодеталей для сборки прототипов и моделей		7	FREE	\N
+38	18	Cтеллаж 5-ярусный для хранения оборудования		1	FREE	\N
+39	19	Планшет графический «XP-PenDecoProMedium»		5	FREE	\N
+40	19	Зеркальный фотоаппарат «EOS 850D»		1	FREE	\N
+41	19	Штатив «RekamMOBI»		1	FREE	\N
+42	19	Микрофон петличный «PowerDeWise»		1	FREE	\N
+43	19	Комплект постоянного света «RekamCL-465»		1	FREE	\N
+44	19	Рабочая станция «Dell» для монтажа объемных объектов дизайна и VR/AR		1	FREE	\N
+45	19	Доска интерактивная (электронный флипчарт) «SMARTkapp»		1	FREE	\N
+46	19	МФУ цветное Kyocera		1	FREE	\N
+47	21	WiFi роботы STM32 с HD камерой и программатором		1	FREE	\N
+48	21	Манипулятор «Hiwonder»		1	FREE	\N
+49	21	Робот-конструктор H3P		1	FREE	\N
+50	21	Шлем виртуальной реальности «OculusQuest 2»		1	FREE	\N
+51	21	Зарядная станция «WST» для подзарядки устройств		1	FREE	\N
+52	21	Комплекс голографической визуализации «NettleDesk»		1	FREE	\N
+53	22	Стулья		12	FREE	\N
+54	22	Стол трапеция		4	FREE	\N
+55	22	Серый стол		2	FREE	\N
+56	22	Кресло-мешок		6	FREE	\N
+57	22	Флипчарт		1	FREE	\N
+58	22	Ноутбук		1	FREE	\N
+59	22	Компьютер с возможностью подключения к сети «Интернет»		1	FREE	\N
+60	22	Шкаф		1	FREE	\N
+61	22	Библиотека		1	FREE	\N
+62	23	Кресло-мешок		5	FREE	\N
+63	23	Доска интерактивная (электронный флипчарт) «SMARTkapp»		1	FREE	\N
+64	23	МФУ цветное Kyocera		1	FREE	\N
+65	23	Акустическая мобильная перегородка		1	FREE	\N
+66	23	Офисная ширма с пробковой поверхностью трехсекционная		1	FREE	\N
+\.
+
+
+--
+-- Data for Name: institutes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.institutes (id, name) FROM stdin;
+1	Институт дополнительного образования и профессиональной переподготовки
+2	Институт математики, физики и информационных технологий
+3	Медицинский институт
+4	Институт естествознания
+5	Педагогический институт
+6	Институт права и национальной безопасности
+7	Институт экономики, управления и сервиса
+8	Факультет истории, мировой политики и социологии
+9	Факультет культуры и искусств
+10	Факультет филологии и журналистики
+11	Факультет физической культуры и спорта
+12	Институт военного образования
+13	Военный учебный центр
+\.
+
+
+--
+-- Data for Name: roles; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.roles (id, role) FROM stdin;
+1	OWNER
+5	ADMIN
+6	USER
+\.
+
+
+--
+-- Data for Name: tokens; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tokens (id, user_id, refresh_token) FROM stdin;
+2	3	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJ1c2VyX2RlZmF1bHRAbWFpbC5ydSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzA2OTU3OTkzLCJleHAiOjE3MDk1NDk5OTN9.CaANBCzDEmLqo9MwYMAWn8wo-XVlFCkVfWd7iAufsIU
+1	2	eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJuZWtpdGVjaC14QG1haWwucnUiLCJyb2xlIjoiT1dORVIiLCJpYXQiOjE3MDY5NTc5OTcsImV4cCI6MTcwOTU0OTk5N30.EhuSfElXt5cma1ziHIG6iZljJXqAmjyd-LcNNG6NYAc
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (id, role_id, first_name, second_name, email, password) FROM stdin;
+2	1	админ	админ	nekitech-x@mail.ru	$2b$04$Ga8S0TVQ1XOUDntLcE/Dbencn8sjmUqAgBu9PvLmsfRf8dSacmqp6
+3	6	Юзер	Юзеров	user_default@mail.ru	$2b$04$WsSB0/6WnunKFNDFuGtdN.a5XEMooVCH8ylX/x7n/wkX92ynth.62
+\.
+
+
+--
+-- Name: areas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.areas_id_seq', 32, true);
+
+
+--
+-- Name: booking_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.booking_id_seq', 1, false);
+
+
+--
+-- Name: equipments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.equipments_id_seq', 66, true);
+
+
+--
+-- Name: institutes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.institutes_id_seq', 1, false);
+
+
+--
+-- Name: roles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.roles_id_seq', 1, false);
+
+
+--
+-- Name: tokens_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tokens_id_seq', 2, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 3, true);
+
+
+--
+-- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public._prisma_migrations
+    ADD CONSTRAINT _prisma_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: areas areas_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.areas
+    ADD CONSTRAINT areas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: booking booking_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.booking
+    ADD CONSTRAINT booking_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: equipments equipments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.equipments
+    ADD CONSTRAINT equipments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: institutes institutes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.institutes
+    ADD CONSTRAINT institutes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: roles roles_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.roles
+    ADD CONSTRAINT roles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tokens tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tokens
+    ADD CONSTRAINT tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tokens_refresh_token_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX tokens_refresh_token_key ON public.tokens USING btree (refresh_token);
+
+
+--
+-- Name: tokens_user_id_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX tokens_user_id_key ON public.tokens USING btree (user_id);
+
+
+--
+-- Name: areas areas_institutes_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.areas
+    ADD CONSTRAINT areas_institutes_id_fkey FOREIGN KEY (institutes_id) REFERENCES public.institutes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: booking booking_equipment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.booking
+    ADD CONSTRAINT booking_equipment_id_fkey FOREIGN KEY (equipment_id) REFERENCES public.equipments(id) ON DELETE CASCADE;
+
+
+--
+-- Name: booking booking_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.booking
+    ADD CONSTRAINT booking_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: equipments equipments_area_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.equipments
+    ADD CONSTRAINT equipments_area_id_fkey FOREIGN KEY (area_id) REFERENCES public.areas(id) ON DELETE CASCADE;
+
+
+--
+-- Name: tokens tokens_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tokens
+    ADD CONSTRAINT tokens_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- Name: users users_role_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.roles(id) ON DELETE CASCADE;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

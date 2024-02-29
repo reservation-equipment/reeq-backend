@@ -12,7 +12,8 @@ const defaultReturnObj: Equipment = {
     id: 0,
     description: "",
     area_id: 0,
-    status: EquipmentStatus.FREE
+    status: EquipmentStatus.FREE,
+    img_hrefs: []
 }
 
 export class EquipmentRepoImplement implements EquipmentRepo {
@@ -24,8 +25,13 @@ export class EquipmentRepoImplement implements EquipmentRepo {
         });
     }
 
-    async getByFieldName(fieldName: string): Promise<Equipment> {
-        return defaultReturnObj
+    async getByFieldName(fieldName: string, fieldType: string): Promise<Equipment | null> {
+        return prisma.equipments.findFirst({
+            where: {
+                [fieldType]: fieldName
+            }
+        });
+
     }
 
     async getCountRows(filter: EquipmentFilter): Promise<any> {
@@ -53,6 +59,7 @@ export class EquipmentRepoImplement implements EquipmentRepo {
     }
 
     async add(equipment: addProductDto): Promise<Equipment> {
+        console.log(equipment)
         return prisma.equipments.create({
             data: {
                 ...equipment

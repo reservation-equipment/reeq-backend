@@ -4,6 +4,12 @@ import {TokenRepo} from "../../repositories/TokenRepo";
 import {postgresTokenRepository} from "../../../infrastructure/db/repository/PostgresQL/TokenRepoImplement";
 import {UserDto} from "../../repositories/dto/UserDto";
 
+interface IValidateRefreshToken {
+    id: number,
+    email: string,
+    role: string
+}
+
 export class TokenService {
     constructor(private tokenRepo: TokenRepo) {
     }

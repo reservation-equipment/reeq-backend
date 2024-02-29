@@ -6,11 +6,12 @@ export class UploadService {
 
     async UploadImagesYandexS3(params: PutObjectRequest) {
         try {
-            this.yandexS3.upload(params, (err: any, data: any) => {
+            const uploadedUrl = await this.yandexS3.upload(params, (err: any, data: any) => {
                 if (err) {
                     console.error(err);
                 } else {
                     console.log(`Image uploaded successfully. File URL: ${data.Location}`);
+                    return uploadedUrl
                 }
             }); // Загрузка в бакет
 
@@ -25,7 +26,7 @@ export class UploadService {
                 if (err) {
                     console.error(err);
                 } else {
-                    console.log(`Image deleted successfully. File URL: ${data.Location}`);
+                    console.log(`Image deleted successfully. File URL: ${data}`);
                 }
             });
 

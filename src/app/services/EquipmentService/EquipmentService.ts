@@ -6,6 +6,7 @@ import {addProductDto} from "../../repositories/dto/addEquipmentDto";
 import {Equipment} from "../../models/Equipment/Equipment";
 import {EquipmentFilter} from "../../../infrastructure/shared/types/Equipment";
 import {uploadService, UploadService} from "../UploadService/UploadService";
+import {PutObjectRequest} from "aws-sdk/clients/s3";
 
 
 export class EquipmentService {
@@ -23,9 +24,7 @@ export class EquipmentService {
     }
 
     async addNewEquipment(fields: addProductDto) {
-        const {image_equipment, ...othersFields} = fields
-        // await this.uploadService.UploadImages(image_equipment);
-        return await this.equipmentRepo.add(othersFields)
+        return await this.equipmentRepo.add(fields)
     }
 
     async getEquipmentById(id: number) {
@@ -37,6 +36,20 @@ export class EquipmentService {
     }
 
     async deleteEquipment(id: number) {
+        try {
+            const equipment = await this.equipmentRepo.getById(id)
+            equipment?.img_hrefs?.forEach(async (imgName) => {
+                const params: PutObjectRequest = {
+                    Bucket: 'reeq-files',
+                    Key: `images/${imgName}`,
+                }
+                await this.uploadService.RemoveImageFromYandexS3(params)
+            })
+        }
+        catch (e) {
+            console.log(e)
+        }
+
         return await this.equipmentRepo.delete(id)
     }
 }

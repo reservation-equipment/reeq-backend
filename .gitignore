@@ -3,4 +3,5 @@ node_modules
 .env
 build
 prisma/migrations
+prisma/dumps
 uploads
