@@ -9,5 +9,5 @@ export interface AreaRepo {
     add(area: addAreaDto): Promise<Area>
     delete(id: number): Promise<Area>
     update(area: updateAreaDto): Promise<Area>
-    getAllWithInstitutes()
+    getAllWithInstitutes(): Promise<any>
 }
