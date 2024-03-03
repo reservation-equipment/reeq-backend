@@ -1,6 +1,5 @@
 import {User} from "../models/User/User";
 import {addUserDto} from "./dto/addUserDto";
-import {updateUserDto} from "./dto/updateUserDto";
 
 export interface UserRepo {
     // getAll(): User[]

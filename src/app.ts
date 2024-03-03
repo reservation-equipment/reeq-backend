@@ -10,13 +10,12 @@ import {ErrorMiddleware} from "./infrastructure/middlewares/ErrorMiddleware";
 import * as process from "process";
 import {bookingRoutes} from "./infrastructure/routes/rest/BookingRoutes";
 import {uploadRoutes} from "./infrastructure/routes/rest/UploadRoutes";
-import {UploadMiddleware} from "./infrastructure/middlewares/UploadMiddleware";
 import bodyParser from "body-parser";
 import multer from "multer";
 
 dotenv.config();
 const app = express();
-
+const router = express.Router();
 app.use(express.json())
 app.use(cookieParser())
 app.use(multer().any());
@@ -31,21 +30,23 @@ app.use(cors({
 }))
 
 
-equipmentRoutes.initRoutes(app);
-areaRoutes.initRoutes(app)
-departmentsRoutes.initRoutes(app)
-userRoutes.initRoutes(app)
-bookingRoutes.initRoutes(app)
-uploadRoutes.initRoutes(app)
+equipmentRoutes.initRoutes(router);
+areaRoutes.initRoutes(router)
+departmentsRoutes.initRoutes(router)
+userRoutes.initRoutes(router)
+bookingRoutes.initRoutes(router)
+uploadRoutes.initRoutes(router)
+
+app.use("/api", router)
 
 app.use(ErrorMiddleware)
 
 const port = process.env.PORT;
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     res.send('Express + TypeScript Server');
 });
 
 
 app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+    console.log(`⚡️[server]: Server is running at http://localhost:${port}/api`);
 });

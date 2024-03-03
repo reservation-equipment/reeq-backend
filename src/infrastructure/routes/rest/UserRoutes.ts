@@ -1,4 +1,4 @@
-import {Express} from 'express';
+import {Express, Router} from 'express';
 import {Routes} from "./Routes";
 import {userController, UserController} from "../../controllers/User/UserController";
 import {body} from 'express-validator';
@@ -8,7 +8,7 @@ class UserRoutes implements Routes {
     constructor(readonly userControllers: UserController, public initRoutePath: string) {
     }
 
-    initRoutes(router: Express) {
+    initRoutes(router: Router) {
         router.post(`${this.initRoutePath}/signUp`,
             body("email").isEmail(),
             body("password").isLength({

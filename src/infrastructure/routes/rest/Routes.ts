@@ -1,5 +1,5 @@
-import {Express} from "express";
+import {Router} from "express";
 
 export interface Routes {
-    initRoutes(router: Express): void
+    initRoutes(router: Router): void
 }

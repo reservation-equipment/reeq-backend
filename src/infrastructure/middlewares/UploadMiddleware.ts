@@ -1,4 +1,3 @@
-import {prisma} from "../db/orm/prisma/PrismaClient";
 import {uploadService} from "../../app/services/UploadService/UploadService";
 import {PutObjectRequest} from 'aws-sdk/clients/s3';
 

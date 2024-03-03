@@ -1,13 +1,13 @@
 import {Routes} from "./Routes";
 import {bookingController, BookingController} from "../../controllers/Booking/BookingController";
-import {Express} from "express";
+import {Express, Router} from "express";
 
 
 export class BookingRoutes implements Routes {
     constructor(private bookingController: BookingController, public initRoutePath: string) {
     }
 
-    initRoutes(router: Express) {
+    initRoutes(router: Router) {
         router.get(`${this.initRoutePath}s`, this.bookingController.getBookings.bind(this.bookingController))
         router.post(`${this.initRoutePath}/create`, this.bookingController.createBooking.bind(this.bookingController))
         router.get(`${this.initRoutePath}/:userId`, this.bookingController.getBookingByUserId.bind(this.bookingController))

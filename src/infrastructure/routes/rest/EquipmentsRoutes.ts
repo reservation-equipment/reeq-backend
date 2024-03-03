@@ -1,14 +1,13 @@
-import {Express} from 'express';
+import {Express, Router} from 'express';
 import {EquipmentController, equipmentsController} from "../../controllers/Equipment/EquipmentController";
 import {Routes} from "./Routes";
-import {UploadMiddleware} from "../../middlewares/UploadMiddleware";
 
 
 class EquipmentsRoutes implements Routes {
     constructor(readonly equipmentsController: EquipmentController, public initRoutePath: string) {
     }
 
-    initRoutes(router: Express) {
+    initRoutes(router: Router) {
         router.get(`${this.initRoutePath}s`, this.equipmentsController.getAllEquipments.bind(this.equipmentsController))
         router.post(`${this.initRoutePath}`, this.equipmentsController.addNewEquipmentController.bind(this.equipmentsController))
         router.get(`${this.initRoutePath}/:id`, this.equipmentsController.getEquipmentById.bind(this.equipmentsController))
