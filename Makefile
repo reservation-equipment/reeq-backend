@@ -5,7 +5,15 @@ watch:
 docker_build:
 	docker-compose up -d --build --wait
 
+
+## Для загрузки дампа
+## заходим в контейнер базы и пишем
+# pg_dump <name_db> -U <name_user> < reeq-db.dump
 #
+
+
+
+
 # Windows
 prisma_add_migrate :
 	docker-compose exec reeq-backend sh -c 'npx prisma migrate dev --name %migration_name%'
