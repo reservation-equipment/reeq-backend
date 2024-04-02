@@ -18,13 +18,13 @@ class BookingRepoImplement implements BookingRepo {
         })
     }
 
-    async getByFilter(date_to: string, skip: number, take: number): Promise<Booking[] | null> {
+    async getByFilter(date: string, skip: number, take: number): Promise<Booking[] | null> {
 
         return prisma.booking.findMany({
             ...(
-                date_to ? {
+                date ? {
                     where: {
-                        date_to: new Date(date_to)
+                        date: new Date(date)
                     },
                 } : {}
             ),

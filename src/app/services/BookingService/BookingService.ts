@@ -31,10 +31,10 @@ export class BookingService {
 
         const addedBooking = this.bookingRepo.add(bookingData)
 
-        await this.equipmentRepo.update({
-            id: equipment_id,
-            status: EquipmentStatus.BOOKED
-        })
+        // await this.equipmentRepo.update({
+        //     id: equipment_id,
+        //     status: EquipmentStatus.BOOKED
+        // })
 
         return addedBooking
     }
@@ -54,8 +54,8 @@ export class BookingService {
         })
     }
 
-    async getBookings(date_to: string, skip: number | undefined, take: number | undefined) {
-        return this.bookingRepo.getByFilter(date_to, skip, take)
+    async getBookings(date: string, skip: number | undefined, take: number | undefined) {
+        return this.bookingRepo.getByFilter(date, skip, take)
     }
 
     async getDatesBooking() {

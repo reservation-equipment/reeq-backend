@@ -25,7 +25,6 @@ export class BookingController {
     async createBooking(req: Request, res: Response, next: NextFunction) {
         try {
             const bookingInfo = req.body
-            console.log(typeof bookingInfo.date_to, typeof bookingInfo.date_from)
             const createdBooking = await this.bookingService.CreateBooking(bookingInfo)
             res.send({
                 msg: `Оборудование ${createdBooking.equipments?.name} успешно забронировано`,
