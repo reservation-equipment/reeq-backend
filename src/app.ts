@@ -12,10 +12,14 @@ import {bookingRoutes} from "./infrastructure/routes/rest/BookingRoutes";
 import {uploadRoutes} from "./infrastructure/routes/rest/UploadRoutes";
 import bodyParser from "body-parser";
 import multer from "multer";
+import {Server} from "socket.io";
+import * as http from "node:http";
 
 dotenv.config();
 const app = express();
 const router = express.Router();
+const server = new http.Server(app)
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(multer().any());
@@ -42,6 +46,15 @@ app.use("/api", router)
 app.use(ErrorMiddleware)
 
 const port = process.env.PORT;
+
+// Websocket init
+
+const io = new Server(server)
+io.on('connection', (socket) => {
+    console.log('a user connected');
+});
+
+
 app.get('/api', (req, res) => {
     res.send('Express + TypeScript Server');
 });

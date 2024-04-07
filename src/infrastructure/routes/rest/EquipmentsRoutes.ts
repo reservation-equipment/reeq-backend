@@ -4,7 +4,7 @@ import {Routes} from "./Routes";
 
 
 class EquipmentsRoutes implements Routes {
-    constructor(readonly equipmentsController: EquipmentController, public initRoutePath: string) {
+    constructor(private equipmentsController: EquipmentController, public initRoutePath: string) {
     }
 
     initRoutes(router: Router) {
@@ -13,6 +13,7 @@ class EquipmentsRoutes implements Routes {
         router.get(`${this.initRoutePath}/:id`, this.equipmentsController.getEquipmentById.bind(this.equipmentsController))
         router.patch(`${this.initRoutePath}`, this.equipmentsController.updateEquipment.bind(this.equipmentsController))
         router.delete(`${this.initRoutePath}/:id`, this.equipmentsController.deleteEquipment.bind(this.equipmentsController))
+        router.get(`${this.initRoutePath}/users_equipment/:equipment_id`, this.equipmentsController.getUsersEquipment.bind(this.equipmentsController))
     }
 }
 

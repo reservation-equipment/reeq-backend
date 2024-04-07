@@ -1,10 +1,11 @@
 import {NextFunction, Request, Response} from "express";
 import {equipmentService, EquipmentService} from "../../../app/services/EquipmentService/EquipmentService";
 import {EquipmentStatus} from "../../shared/types/Equipment";
+import {bookingService, BookingService} from "../../../app/services/BookingService/BookingService";
 
 
 export class EquipmentController {
-    constructor(public equipmentService: EquipmentService) {
+    constructor(public equipmentService: EquipmentService, private bookingService: BookingService) {
     }
 
     async getAllEquipments(req: Request, res: Response, next: NextFunction) {
@@ -70,7 +71,20 @@ export class EquipmentController {
             next(e)
         }
     }
+    
+    async getUsersEquipment(req: Request, res: Response, next: NextFunction) {
+        try {
+            const equipment_id = Number(req.params.equipment_id)
+            const listUsers = await this.bookingService.getListUsersForEquipment(equipment_id)
+            res.send({
+                msg: `Список юзеров, забронировавших текущее оборудование, получен`,
+                data: listUsers
+            })
+        } catch (e: any) {
+            next(e)
+        }
+    }
 
 }
 
-export const equipmentsController = new EquipmentController(equipmentService)
+export const equipmentsController = new EquipmentController(equipmentService, bookingService)

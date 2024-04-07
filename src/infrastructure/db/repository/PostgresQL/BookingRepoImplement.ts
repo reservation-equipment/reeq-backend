@@ -1,20 +1,31 @@
 import {BookingRepo} from "../../../../app/repositories/BookingRepo";
 import {Booking} from "../../../../app/models/Booking/Booking";
-import {addBookingDto} from "../../../../app/repositories/dto/addBookingDto";
+import {addBookingDto, getBookingByParamsDtoType} from "../../../../app/repositories/dto/addBookingDto";
 import {prisma} from "../../orm/prisma/PrismaClient";
 import {updateBookingDto} from "../../../../app/repositories/dto/updateBookingDto";
-import * as console from "console";
 
 
 class BookingRepoImplement implements BookingRepo {
-    async getById(id: number){
+    
+    async getListsTimeReservation(equipment_id: number) {
         return prisma.booking.findMany({
             where: {
-                user_id: id
+                equipment_id,
             },
-            include: {
-                equipments: true
+            select: {
+                date: true,
+                time_to: true,
+                time_from: true
             }
+        })
+    }
+    
+    async getByParams(params: getBookingByParamsDtoType, include: object) {
+        return prisma.booking.findMany({
+            where: {
+                ...params
+            },
+            include,
         })
     }
 

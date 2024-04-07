@@ -1,10 +1,13 @@
 import {bookingService, BookingService} from "../../../app/services/BookingService/BookingService";
 import {NextFunction, Request, Response} from "express";
 import * as console from "console";
+import {getBookingByParams} from "../../shared/types/Booking";
+import {getBookingByParamsDto} from "../../../app/repositories/dto/addBookingDto";
+import {bookingValidations, BookingValidations} from "../../validations/Booking/BookingValidations";
 
 
 export class BookingController {
-    constructor(private bookingService: BookingService) {
+    constructor(private bookingService: BookingService, private validation: BookingValidations) {
     }
 
     async getBookings(req: Request, res: Response, next: NextFunction) {
@@ -25,23 +28,32 @@ export class BookingController {
     async createBooking(req: Request, res: Response, next: NextFunction) {
         try {
             const bookingInfo = req.body
-            const createdBooking = await this.bookingService.CreateBooking(bookingInfo)
-            res.send({
-                msg: `Оборудование ${createdBooking.equipments?.name} успешно забронировано`,
-                data: createdBooking
-            })
+            const {equipment_id, time_from, time_to, date} = bookingInfo
+            const isValidTime = await this.validation.validationTimeReservationForm(equipment_id, time_from, time_to, date)
+            
+            if(isValidTime) {
+                const createdBooking = await this.bookingService.CreateBooking(bookingInfo)
+                res.send({
+                    msg: `Оборудование ${createdBooking.equipments?.name} успешно забронировано`,
+                    data: createdBooking
+                })
+            } else {
+                res.send({
+                    msg: 'Вы выбрали невалидное время, оно пересекается с другими бронями для данного оборудования',
+                    err: new Error("dontValidTimeInterval").message
+                })
+            }
         } catch (e) {
             next(e)
         }
     }
-
-    async getBookingByUserId(req: Request, res: Response, next: NextFunction) {
+    
+    async getBookingByParams(req: Request<getBookingByParams>, res: Response, next: NextFunction) {
         try {
-            const userId = Number(req.params.userId)
-            console.log(req.params.userId, userId)
-            const listBookings = await this.bookingService.getBookingByUserId(userId)
+            const params = getBookingByParamsDto(req.query);
+            const listBookings = await this.bookingService.getBookingByParams(params)
             res.send({
-                msg: `Бронирования юзера успешно получены`,
+                msg: 'Бронирования успешно получены!',
                 data: listBookings
             })
         } catch (e) {
@@ -77,4 +89,4 @@ export class BookingController {
 
 }
 
-export const bookingController = new BookingController(bookingService)
+export const bookingController = new BookingController(bookingService, bookingValidations)

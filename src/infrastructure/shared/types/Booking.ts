@@ -3,3 +3,8 @@ export enum BookingStatus {
     COMPLETE = "COMPLETE",
     EXPIRED = "EXPIRED"
 }
+
+
+export interface getBookingByParams {
+    [key: string]: any;
+}

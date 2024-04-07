@@ -1,6 +1,6 @@
 import {BookingRepo} from "../../repositories/BookingRepo";
 import {postgresBookingRepository} from "../../../infrastructure/db/repository/PostgresQL/BookingRepoImplement";
-import {addBookingDto} from "../../repositories/dto/addBookingDto";
+import {addBookingDto, getBookingByParamsDtoType} from "../../repositories/dto/addBookingDto";
 import {EquipmentRepo} from "../../repositories/EquipmentRepo";
 import {postgresEquipmentRepository} from "../../../infrastructure/db/repository/PostgresQL/EquipmentRepoImplement";
 import {EquipmentStatus} from "../../../infrastructure/shared/types/Equipment";
@@ -39,8 +39,26 @@ export class BookingService {
         return addedBooking
     }
 
-    async getBookingByUserId(userId: number) {
-        return this.bookingRepo.getById(userId)
+    async getBookingByParams(params: getBookingByParamsDtoType) {
+        return this.bookingRepo.getByParams(params, {
+            equipments: true,
+            users: true
+        })
+    }
+    
+    async getListUsersForEquipment(equipment_id: number) {
+        return this.bookingRepo.getByParams({
+            equipment_id
+        }, {
+            users: {
+                select: {
+                    id: true,
+                    first_name: true,
+                    second_name: true,
+                    email: true
+                }
+            }
+        })
     }
 
     async closeBooking(bookingId: number, equipmentId: number) {

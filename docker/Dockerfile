@@ -18,17 +18,11 @@ RUN npm ci
 #prisma init
 RUN npx prisma generate
 
-ENV DATABASE_URL="postgresql://postgres:postgres@db:5437/reeq-db?schema=public"
-
 ## Push prisma schema to database
 #RUN npx prisma db push
 
 # Copy folder project
 COPY . .
 
-## Build
-#RUN npm run build
-
-EXPOSE 3005
 
 CMD ["npm", "run", "dev"]
