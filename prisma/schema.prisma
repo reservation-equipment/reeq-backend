@@ -41,7 +41,6 @@ model equipments {
   name        String          @db.VarChar(255)
   description String?
   count       Int
-  status      StatusEquipment @default(FREE)
   img_hrefs   String[]
   created_at  DateTime        @default(now()) @db.Timestamptz(6)
   updated_at  DateTime        @default(now()) @db.Timestamptz(6)
@@ -94,9 +93,4 @@ enum StatusBooking {
   CREATED
   COMPLETE
   EXPIRED
-}
-
-enum StatusEquipment {
-  FREE
-  BOOKED
 }

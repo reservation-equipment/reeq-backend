@@ -13,7 +13,6 @@ export class EquipmentController {
             const {name, status, skip, take} = req.query;
             const {data, count} = await this.equipmentService.getAllEquipments({
                 name: name as string,
-                status: status as EquipmentStatus,
             }, Number(skip), Number(take))
 
             res.send({

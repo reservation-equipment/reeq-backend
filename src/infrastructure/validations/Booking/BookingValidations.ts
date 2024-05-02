@@ -1,4 +1,3 @@
-import {BookingService} from "../../../app/services/BookingService/BookingService";
 import {BookingRepo} from "../../../app/repositories/BookingRepo";
 import {postgresBookingRepository} from "../../db/repository/PostgresQL/BookingRepoImplement";
 import {formatDateTime, rangesIntersect} from "../../helpers/Time";

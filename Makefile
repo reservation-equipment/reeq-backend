@@ -10,8 +10,17 @@ docker_create_volume:
 
 build: docker_create_volume docker_build run_db_push
 
+backup_db:
+	docker exec db sh -c "pg_dumpall -c -U postgres > dump.sql"
+
+restore_db:
+	cat dump_.sql | docker exec -i db psql -U postgres -d reeq-db
+
 run_db_push:
 	npx prisma db push
+
+cp_dump_file:
+	docker cp 77725cc46d2b:/dump.sql ./prisma/dumps
 
 run_migrations:
 	npx prisma migrate deploy

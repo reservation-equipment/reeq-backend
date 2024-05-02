@@ -12,10 +12,10 @@ export class BookingService {
     constructor(private bookingRepo: BookingRepo, private equipmentRepo: EquipmentRepo) {
     }
 
-    async isBooking(id: number) {
-        const booking = await this.equipmentRepo.getById(id)
-        return booking?.status === EquipmentStatus.BOOKED
-    }
+    // async isBooking(id: number) {
+    //     const booking = await this.equipmentRepo.getById(id)
+    //     return booking?.status === EquipmentStatus.BOOKED
+    // }
 
     /**
      * Создание брони конкретного оборудования в БД
@@ -25,16 +25,11 @@ export class BookingService {
     async CreateBooking(bookingData: addBookingDto) {
         const {equipment_id} = bookingData
 
-        if(await this.isBooking(equipment_id)) {
-            throw ErrorsHandler.BadRequest("Оборудование уже забронировано!" )
-        }
+        // if(await this.isBooking(equipment_id)) {
+        //     throw ErrorsHandler.BadRequest("Оборудование уже забронировано!" )
+        // }
 
         const addedBooking = this.bookingRepo.add(bookingData)
-
-        // await this.equipmentRepo.update({
-        //     id: equipment_id,
-        //     status: EquipmentStatus.BOOKED
-        // })
 
         return addedBooking
     }
@@ -62,10 +57,7 @@ export class BookingService {
     }
 
     async closeBooking(bookingId: number, equipmentId: number) {
-        await this.equipmentRepo.update({
-            id: equipmentId,
-            status: EquipmentStatus.FREE
-        })
+    
         return this.bookingRepo.update({
             id: bookingId,
             status: BookingStatus.COMPLETE,

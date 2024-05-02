@@ -12,7 +12,6 @@ const defaultReturnObj: Equipment = {
     id: 0,
     description: "",
     area_id: 0,
-    status: EquipmentStatus.FREE,
     img_hrefs: []
 }
 
@@ -51,7 +50,6 @@ export class EquipmentRepoImplement implements EquipmentRepo {
                 name: {
                     contains: filter?.name
                 },
-                status: filter?.status
             },
             skip,
             take,
