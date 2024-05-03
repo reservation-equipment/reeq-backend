@@ -3,7 +3,6 @@ import {Booking} from "../../../../app/models/Booking/Booking";
 import {addBookingDto, getBookingByParamsDtoType} from "../../../../app/repositories/dto/addBookingDto";
 import {prisma} from "../../orm/prisma/PrismaClient";
 import {updateBookingDto} from "../../../../app/repositories/dto/updateBookingDto";
-import {BookingValidations} from "../../../validations/Booking/BookingValidations";
 
 
 class BookingRepoImplement implements BookingRepo {
