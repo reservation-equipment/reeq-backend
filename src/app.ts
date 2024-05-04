@@ -13,6 +13,10 @@ import {uploadRoutes} from "./infrastructure/routes/rest/UploadRoutes";
 import bodyParser from "body-parser";
 import multer from "multer";
 import * as http from "node:http";
+import {NotificationsService} from "./app/services/Notifications/NotificationsService";
+import {postgresBookingRepository} from "./infrastructure/db/repository/PostgresQL/BookingRepoImplement";
+import {postgresUserRepository} from "./infrastructure/db/repository/PostgresQL/UserRepoImplement";
+
 
 dotenv.config();
 const app = express();
@@ -40,9 +44,19 @@ userRoutes.initRoutes(router)
 bookingRoutes.initRoutes(router)
 uploadRoutes.initRoutes(router)
 
+router.post("/saveTokenApp", async (req, res) => {
+    const {token, userId} = req.body;
+    await firebase.saveToken(token, userId);
+    res.status(200).send("Token saved")
+})
+
 app.use("/api", router)
 
 app.use(ErrorMiddleware)
+
+// Firebase
+const firebase = new NotificationsService(postgresBookingRepository, postgresUserRepository)
+
 
 const port = process.env.PORT;
 
