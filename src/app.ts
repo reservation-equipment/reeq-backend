@@ -19,6 +19,7 @@ import {postgresUserRepository} from "./infrastructure/db/repository/PostgresQL/
 import {Expo} from "expo-server-sdk";
 import {CronJob} from "cron";
 import {FirebaseService} from "./app/services/Firebase/FirebaseService";
+import {postgresEquipmentRepository} from "./infrastructure/db/repository/PostgresQL/EquipmentRepoImplement";
 
 
 dotenv.config();
@@ -55,32 +56,12 @@ app.use(ErrorMiddleware)
 
 // Firebase
 const firebase = new FirebaseService(postgresBookingRepository, postgresUserRepository)
-const notificationExpo = new NotificationsService(postgresBookingRepository,
+const notificationExpo = new NotificationsService(postgresEquipmentRepository, postgresBookingRepository,
 	postgresUserRepository,
 	firebase,
 	expo)
 
-router.post("/saveTokenApp", async (req, res) => {
-	const {token, userId} = req.body;
-	await firebase.saveToken(token, userId);
-	res.status(200).send("Token saved")
-})
-
-router.post("/sendNotification", async (req, res) => {
-	const {userId} = req.body;
-	const {token} = await firebase.getToken(userId);
-	console.log(userId, token)
-	expo.sendPushNotificationsAsync([{
-		to: token,
-		sound: 'default',
-		title: 'Backend hello',
-		body: 'asdasdasdasdasd!',
-		data: {someData: 'kek'},
-	}])
-	res.status(200).send("Notification send")
-})
-
-// new CronJob('*/20 * * * * *', async () => {
+// new CronJob('*/30 * * * * *', async () => {
 //     notificationExpo.sendAlertReservationNotification()
 // }).start()
 

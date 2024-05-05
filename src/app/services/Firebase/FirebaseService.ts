@@ -41,4 +41,10 @@ export class FirebaseService {
 	async getToken(userId: string){
 		return (await get(child(this.dbRef, `userTokens/${userId}`))).val() ?? {};
 	}
+	
+	async saveNotification(userId: string, notificationData: any) {
+		const values = (await get(child(this.dbRef, `notifications/${userId}`))).val() ?? {};
+		const payload = {...values, notificationData};
+		set(ref(this.db, `notifications/${userId}`), payload);
+	}
 }

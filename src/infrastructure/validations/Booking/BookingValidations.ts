@@ -22,6 +22,23 @@ export class BookingValidations {
 		
 		const list = await this.bookingRepo.getListsTimeReservation(equipment_id)
 		const checkedRange = formatDateTime(new Date(date), time_from, time_to)
+		if(time_from >= time_to) {
+			return {
+				isValid: false,
+				msg: 'Время начала бронирования не может быть больше времени окончания',
+				errMsg: 'timeFromMoreTimeTo'
+			}
+		
+		}
+		
+		if(time_to <= time_from) {
+			return {
+				isValid: false,
+				msg: 'Время окончания бронирования не может быть меньше времени начала',
+				errMsg: 'timeToLessTimeFrom'
+			}
+		}
+		
 		const formatList = list.map((value: any) => {
 			const {date, time_from, time_to} = value
 			return formatDateTime(date, time_from, time_to)
@@ -29,11 +46,21 @@ export class BookingValidations {
 		
 		for (const range of formatList) {
 			if(!rangesIntersect(checkedRange, range)) {
-				return false
+				return {
+					isValid: false,
+					msg: 'Вы выбрали невалидное время, оно пересекается с другими бронями для данного оборудования',
+					errMsg: 'dontValidTimeInterval'
+				}
 			}
 		}
-		return true
+		
+		return {
+			isValid: true,
+			msg: '',
+			errMsg: ''
+		}
 	}
+	
 }
 
 export const bookingValidations = new BookingValidations(postgresBookingRepository)

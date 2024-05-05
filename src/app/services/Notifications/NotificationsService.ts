@@ -4,10 +4,12 @@ import {BookingRepo} from "../../repositories/BookingRepo";
 import {UserRepo} from "../../repositories/UserRepo";
 import {FirebaseService} from "../Firebase/FirebaseService";
 import {Expo} from "expo-server-sdk";
+import {EquipmentRepo} from "../../repositories/EquipmentRepo";
 
 
 export class NotificationsService {
 	constructor(
+		private EquipmentRepo: EquipmentRepo,
 		private BookingRepo: BookingRepo,
 		private UserRepo: UserRepo,
 		private firebase: FirebaseService,
@@ -31,16 +33,23 @@ export class NotificationsService {
 				equipment_id: true
 			})
 			
-			listBookings?.forEach((booking: any) => {
-				const {date, time_to} = booking;
+			listBookings?.forEach(async (booking: any) => {
+				const {date, time_to, equipment_id} = booking;
+				const equipment = await this.EquipmentRepo.getById(equipment_id)
 				if (equalDateTimeBookingExpired(date, time_to)) {
-					this.firebase.getToken(String(user_id)).then((data: any) => {
+					this.firebase.getToken(String(user_id)).then(async (data: any) => {
 						const {token} = data;
+						const notificationData = {
+							date,
+							time_to,
+							equipment: {
+								id: equipment?.id,
+								name: equipment?.name
+							}
+						};
 						if(token) {
-							this.sendExpoNotification(token, {
-								date,
-								time_to
-							})
+							this.sendExpoNotification(token, notificationData)
+							await this.firebase.saveNotification(String(user_id), notificationData)
 						} else {
 							console.log("Token not found!")
 						}

@@ -31,7 +31,7 @@ export class BookingController {
             const {equipment_id, time_from, time_to, date} = bookingInfo
             const isValidTime = await this.validation.validationTimeReservationForm(equipment_id, time_from, time_to, date)
             
-            if(isValidTime) {
+            if(isValidTime.isValid) {
                 const createdBooking = await this.bookingService.CreateBooking(bookingInfo)
                 res.send({
                     msg: `Оборудование ${createdBooking.equipments?.name} успешно забронировано`,
@@ -39,8 +39,8 @@ export class BookingController {
                 })
             } else {
                 res.send({
-                    msg: 'Вы выбрали невалидное время, оно пересекается с другими бронями для данного оборудования',
-                    err: new Error("dontValidTimeInterval").message
+                    msg: isValidTime.msg,
+                    err: new Error(isValidTime.errMsg).message
                 })
             }
         } catch (e) {
